@@ -170,7 +170,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 
                 ->scalarNode('logger_id')
-                    ->defaultValue('logger')
+                    ->defaultNull()
                 ->end()
             ->end();
         

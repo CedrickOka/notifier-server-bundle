@@ -102,7 +102,6 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
         }
         
         $container->setParameter('oka_notifier_server.messenger.bus_id', $config['messenger']['bus_id']);
-        $container->setParameter('oka_notifier_server.logger_id', $config['logger_id']);
         
         // Reporting notification configuration
         if (true === $this->isConfigEnabled($container, $config['reporting'])) {
@@ -113,6 +112,10 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
             $container->setParameter('oka_notifier_server.reporting.pagination_manager_name', $config['reporting']['pagination_manager_name']);
             
             $loader->load('reporting.yaml');
+        }
+        
+        if (null !== $config['logger_id']) {
+            $container->setParameter('oka_notifier_server.logger_id', $config['logger_id']);
         }
         
         $container
