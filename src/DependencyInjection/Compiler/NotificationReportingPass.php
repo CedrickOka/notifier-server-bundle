@@ -31,8 +31,8 @@ class NotificationReportingPass implements CompilerPassInterface
     
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasParameter('oka_notifier_server.reporting.class_name') && true === $container->has('oka_notifier_server.send_report_controller')) {
-            throw new \LogicException('To enable notification reporting controller you have to define "oka_notifier_server.reporting.class_name" configuration value.');
+        if (false === $container->has('oka_notifier_server.send_report_controller')) {
+            return;
         }
         
         $registry = self::$doctrineDrivers[$container->getParameter('oka_notifier_server.reporting.db_driver')]['registry'];
