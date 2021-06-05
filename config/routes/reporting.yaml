@@ -1,0 +1,17 @@
+oka_notifier_server_send_reports_list:
+    methods: GET
+    path: /{version}/{protocol}/send-reports
+    controller: Oka\Notifier\ServerBundle\Controller\SendReportController::list
+    defaults:
+      version: v1
+      protocol: rest
+
+oka_notifier_server_send_reports_read:
+    methods: GET
+    path: /{version}/{protocol}/send-reports/{id}
+    controller: Oka\Notifier\ServerBundle\Controller\SendReportController::read
+    requirements:
+        id: '^[0-9a-fA-F]+$'
+    defaults:
+        version: v1
+        protocol: rest

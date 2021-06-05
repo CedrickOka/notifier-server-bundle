@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                    http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd"
+>
+    <mapped-superclass name="Oka\Notifier\ServerBundle\Model\SendReport">
+        <field field-name="channel" name="channel" type="string" />
+        <field field-name="paylaod" name="paylaod" type="hash" />
+        <field field-name="issuedAt" name="issued_at" type="date" />
+
+        <indexes>
+            <index unique="false">
+                <key name="channel" order="asc" />
+                <option name="background" value="true" />
+            </index>
+        </indexes>
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="prePersist"/>
+        </lifecycle-callbacks>
+    </mapped-superclass>
+</doctrine-mongo-mapping>

@@ -1,0 +1,7 @@
+oka_notifier_server_notifications_create:
+    methods: POST
+    path: /{version}/{protocol}/notifications
+    controller: Oka\Notifier\ServerBundle\Controller\NotificationController::create
+    defaults:
+      version: v1
+      protocol: rest

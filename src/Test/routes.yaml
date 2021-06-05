@@ -1,0 +1,2 @@
+notifier:
+    resource: "@OkaNotifierServerBundle/config/routing.yaml"

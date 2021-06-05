@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<serializer xmlns="http://symfony.com/schema/dic/serializer-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/serializer-mapping
+        https://symfony.com/schema/dic/serializer-mapping/serializer-mapping-1.0.xsd"
+>
+    <class name="Oka\Notifier\ServerBundle\Model\SendReport">
+        <attribute name="id">
+            <group>summary</group>
+            <group>details</group>
+        </attribute>
+
+        <attribute name="channel">
+            <group>summary</group>
+            <group>details</group>
+        </attribute>
+
+        <attribute name="paylaod">
+            <group>summary</group>
+            <group>details</group>
+        </attribute>
+
+        <attribute name="issuedAt" serialized-name="issuedAt">
+            <group>summary</group>
+            <group>details</group>
+        </attribute>
+    </class>
+</serializer>

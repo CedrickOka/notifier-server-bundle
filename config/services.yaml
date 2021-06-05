@@ -1,0 +1,14 @@
+services:
+    oka_notifier_server.notification_controller:
+        public: true
+        class: Oka\Notifier\ServerBundle\Controller\NotificationController
+        arguments: ['']
+
+    oka_notifier_server.messenger.notification_handler:
+        class: Oka\Notifier\ServerBundle\MessageHandler\NotificationHandler
+        arguments: [!tagged_iterator oka_notifier_server.channel_handler, '', '']
+        tags: ['messenger.message_handler']
+
+    Oka\Notifier\ServerBundle\Controller\NotificationController:
+        public: true
+        alias: 'oka_notifier_server.notification_controller'
