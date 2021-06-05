@@ -5,7 +5,6 @@ use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappi
 use Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckFirebaseMessagingEnabledPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckGuzzleHttpEnabledPass;
-use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckInputHandlerEnabledPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckMailerEnabledPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckPaginationEnabledPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\LoggerPass;
@@ -33,7 +32,6 @@ class OkaNotifierServerBundle extends Bundle
         $container->addCompilerPass(new CheckMailerEnabledPass());
         $container->addCompilerPass(new CheckGuzzleHttpEnabledPass());
         $container->addCompilerPass(new CheckFirebaseMessagingEnabledPass());
-        $container->addCompilerPass(new CheckInputHandlerEnabledPass());
         $container->addCompilerPass(new CheckPaginationEnabledPass());
         $container->addCompilerPass(new NotificationReportingPass());
         $container->addCompilerPass(new MessengerPass());

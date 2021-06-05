@@ -13,7 +13,7 @@ class SendReport extends BaseSendReport
 {
     /**
      * @MongoDB\Id()
-     * 
+     *
      * @var string
      */
     protected $id;
