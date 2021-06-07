@@ -22,7 +22,6 @@ class SendReportManager
         $metadata = $objectManager->getClassMetadata($class);
         $this->objectManager = $objectManager;
         $this->class = $metadata->getName();
-        
         $this->objectRepository = $objectManager->getRepository($this->class);
     }
     
