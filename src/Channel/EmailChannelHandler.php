@@ -36,7 +36,7 @@ class EmailChannelHandler implements ChannelHandlerInterface
         $attributes = $notification->getAttributes();
         
         if (true === isset($attributes['attachments']) && true === is_array($attributes['attachments'])) {
-            foreach ($attributes['attachments'] ?? [] as $value) {
+            foreach ($attributes['attachments'] as $value) {
                 if (false === isset($value['path'])) {
                     continue;
                 }
@@ -52,7 +52,7 @@ class EmailChannelHandler implements ChannelHandlerInterface
         if (true === isset($attributes['headers']) && true === is_array($attributes['headers'])) {
             $headers = $email->getHeaders();
             
-            foreach ($attributes['headers'] ?? [] as $name => $value) {
+            foreach ($attributes['headers'] as $name => $value) {
                 $headers->addHeader($name, $value);
             }
         }
