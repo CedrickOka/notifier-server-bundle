@@ -99,13 +99,6 @@ class SendReport extends BaseSendReport
      * @var string
      */
     protected $id;
-
-    public function __construct()
-    {
-        parent::__construct();
-        
-        // your own logic
-    }
 }
 ```
 
@@ -123,12 +116,6 @@ use Oka\Notifier\ServerBundle\Model\SendReport as BaseSendReport;
 
 class SendReport extends BaseSendReport
 {
-	public function __construct()
-	{
-		parent::__construct();
-		
-		// your own logic
-	}
 }
 ```
 
