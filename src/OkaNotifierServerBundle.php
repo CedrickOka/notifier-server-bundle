@@ -40,7 +40,7 @@ class OkaNotifierServerBundle extends Bundle
     
     private function addRegisterMappingsPass(ContainerBuilder $container)
     {
-        $mapping = [realpath(__DIR__.'/../config/doctrine-mapping') => 'Oka\Notifier\ServerBundle\Model'];
+        $mapping = [realpath(__DIR__.'/../config/doctrine') => 'Oka\Notifier\ServerBundle\Model'];
         
         if (true === class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')) {
             $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mapping, array('oka_notifier_server.reporting.model_manager_name'), 'oka_notifier_server.reporting.backend_type_orm'));
