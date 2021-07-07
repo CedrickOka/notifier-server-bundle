@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\Tests\Channel;
 
 use Oka\Notifier\Message\Address;
@@ -14,13 +15,13 @@ class ClickatellChannelHandlerTest extends KernelTestCase
      * @var \Oka\Notifier\ServerBundle\Channel\ClickatellChannelHandler
      */
     private $handler;
-    
-    public function setUp() :void
+
+    public function setUp(): void
     {
         static::bootKernel();
         $this->handler = static::$container->get('oka_notifier_server.channel.clickatell_handler');
     }
-    
+
     /**
      * @covers
      */

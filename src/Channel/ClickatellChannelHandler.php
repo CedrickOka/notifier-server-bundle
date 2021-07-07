@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\Channel;
 
 use GuzzleHttp\Client;
@@ -16,7 +17,7 @@ class ClickatellChannelHandler implements SmsChannelHandlerInterface
      * @var \GuzzleHttp\Client
      */
     private $httpClient;
-    
+
     public function __construct(string $url, string $token, bool $debug)
     {
         $this->httpClient = new Client([
@@ -29,12 +30,12 @@ class ClickatellChannelHandler implements SmsChannelHandlerInterface
             ]
         ]);
     }
-    
+
     public function supports(Notification $notification): bool
     {
         return in_array(static::getName(), $notification->getChannels(), true);
     }
-    
+
     public function send(Notification $notification): void
     {
         try {
@@ -49,7 +50,7 @@ class ClickatellChannelHandler implements SmsChannelHandlerInterface
             throw new InvalidNotificationException(null, null, $e);
         }
     }
-    
+
     public static function getName(): string
     {
         return 'clickatell';

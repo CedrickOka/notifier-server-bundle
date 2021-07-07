@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\Channel;
 
 use GuzzleHttp\Client;
@@ -16,7 +17,7 @@ class InfobipChannelHandler implements SmsChannelHandlerInterface
      * @var \GuzzleHttp\Client
      */
     private $httpClient;
-    
+
     public function __construct(string $url, string $apiKey, bool $debug)
     {
         $this->httpClient = new Client([
@@ -28,12 +29,12 @@ class InfobipChannelHandler implements SmsChannelHandlerInterface
             ]
         ]);
     }
-    
+
     public function supports(Notification $notification): bool
     {
         return in_array(static::getName(), $notification->getChannels(), true);
     }
-    
+
     public function send(Notification $notification): void
     {
         try {
@@ -53,7 +54,7 @@ class InfobipChannelHandler implements SmsChannelHandlerInterface
             throw new InvalidNotificationException(null, null, $e);
         }
     }
-    
+
     public static function getName(): string
     {
         return 'infobip';

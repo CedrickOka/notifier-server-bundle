@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\DependencyInjection;
 
 use Oka\Notifier\Message\Notification;
@@ -38,7 +39,7 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
             'tag' => 'doctrine_mongodb.odm.event_subscriber',
         ],
     ];
-    
+
     /**
      * {@inheritDoc}
      */
@@ -46,10 +47,10 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.yaml');
-        
+
         if (true === $this->isConfigEnabled($container, $config['channels']['email'])) {
             $emailChannelDefinition = $container->setDefinition('oka_notifier_server.channel.email_handler'::class, new Definition(
                 EmailChannelHandler::class,
@@ -57,7 +58,7 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
             ));
             $emailChannelDefinition->addTag('oka_notifier_server.channel_handler');
         }
-        
+
         if (true === $this->isConfigEnabled($container, $config['channels']['sms'])) {
             $emailChannelDefinition = $container->setDefinition('oka_notifier_server.channel.sms_handler', new Definition(
                 SmsChannelHandler::class,
@@ -65,7 +66,7 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
             ));
             $emailChannelDefinition->addTag('oka_notifier_server.channel_handler');
         }
-        
+
         if (true === $this->isConfigEnabled($container, $config['channels']['smpp'])) {
             $emailChannelDefinition = $container->setDefinition('oka_notifier_server.channel.smpp_handler', new Definition(
                 SmppChannelHandler::class,
@@ -83,7 +84,7 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
             $emailChannelDefinition->addTag('oka_notifier_server.channel_handler');
             $emailChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 10]);
         }
-        
+
         if (true === $this->isConfigEnabled($container, $config['channels']['clickatell'])) {
             $emailChannelDefinition = $container->setDefinition('oka_notifier_server.channel.clickatell_handler', new Definition(
                 ClickatellChannelHandler::class,
@@ -92,7 +93,7 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
             $emailChannelDefinition->addTag('oka_notifier_server.channel_handler');
             $emailChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 5]);
         }
-        
+
         if (true === $this->isConfigEnabled($container, $config['channels']['firebase'])) {
             $emailChannelDefinition = $container->setDefinition('oka_notifier_server.channel.firebase_handler', new Definition(
                 FirebaseChannelHandler::class,
@@ -100,9 +101,9 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
             ));
             $emailChannelDefinition->addTag('oka_notifier_server.channel_handler');
         }
-        
+
         $container->setParameter('oka_notifier_server.messenger.bus_id', $config['messenger']['bus_id']);
-        
+
         // Reporting notification configuration
         if (true === $this->isConfigEnabled($container, $config['reporting'])) {
             $container->setParameter('oka_notifier_server.reporting.db_driver', $config['reporting']['db_driver']);
@@ -110,29 +111,29 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
             $container->setParameter('oka_notifier_server.reporting.model_manager_name', $config['reporting']['model_manager_name']);
             $container->setParameter('oka_notifier_server.reporting.class_name', $config['reporting']['class_name']);
             $container->setParameter('oka_notifier_server.reporting.pagination_manager_name', $config['reporting']['pagination_manager_name']);
-            
+
             $loader->load('reporting.yaml');
         }
-        
+
         if (null !== $config['logger_id']) {
             $container->setParameter('oka_notifier_server.logger_id', $config['logger_id']);
         }
-        
+
         $container
             ->registerForAutoconfiguration(ChannelHandlerInterface::class)
             ->addTag('oka_notifier_server.channel_handler');
-        
+
         $container
             ->registerForAutoconfiguration(SmsChannelHandlerInterface::class)
             ->addTag('oka_notifier_server.channel_handler_sms');
     }
-    
+
     public function prepend(ContainerBuilder $container)
     {
         $configs = $container->getExtensionConfig($this->getAlias());
         $configs = $container->getParameterBag()->resolveValue($configs);
         $config = $this->processConfiguration(new Configuration(), $configs);
-        
+
         $container->prependExtensionConfig('framework', [
             'messenger' => [
                 'serializer' => [

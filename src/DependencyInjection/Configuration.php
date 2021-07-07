@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\DependencyInjection;
 
 use Oka\Notifier\ServerBundle\Model\SendReportInterface;
@@ -15,7 +16,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('oka_notifier_server');
         /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
-        
+
         $rootNode
             ->addDefaultsIfNotSet()
             ->children()
@@ -26,12 +27,12 @@ class Configuration implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->canBeEnabled()
                         ->end()
-                        
+
                         ->arrayNode('sms')
                             ->addDefaultsIfNotSet()
                             ->canBeDisabled()
                         ->end()
-                        
+
                         ->arrayNode('smpp')
                             ->addDefaultsIfNotSet()
                             ->canBeEnabled()
@@ -47,7 +48,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
-                        
+
                         ->arrayNode('infobip')
                             ->addDefaultsIfNotSet()
                             ->canBeEnabled()
@@ -61,13 +62,13 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('url')
                                     ->defaultNull()
                                 ->end()
-                                
+
                                 ->scalarNode('api_key')
                                     ->defaultNull()
                                 ->end()
                             ->end()
                         ->end()
-                        
+
                         ->arrayNode('clickatell')
                             ->addDefaultsIfNotSet()
                             ->canBeEnabled()
@@ -81,13 +82,13 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('url')
                                     ->defaultNull()
                                 ->end()
-                                
+
                                 ->scalarNode('token')
                                     ->defaultNull()
                                 ->end()
                             ->end()
                         ->end()
-                        
+
                         ->arrayNode('firebase')
                             ->addDefaultsIfNotSet()
                             ->canBeEnabled()
@@ -105,7 +106,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-                
+
                 ->arrayNode('messenger')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -113,26 +114,26 @@ class Configuration implements ConfigurationInterface
                             ->cannotBeEmpty()
                             ->defaultValue('messenger.default_bus')
                         ->end()
-                    
+
                         ->scalarNode('queue_name')
                             ->cannotBeEmpty()
                             ->defaultValue('messages.notifier')
                         ->end()
-                        
+
                         ->arrayNode('binding_keys')
                             ->scalarPrototype()
                                 ->cannotBeEmpty()
                                 ->defaultValue(['notification'])
                             ->end()
                         ->end()
-                        
+
                         ->scalarNode('default_publish_routing_key')
                             ->cannotBeEmpty()
                             ->defaultValue('notification')
                         ->end()
                     ->end()
                 ->end()
-                
+
                 ->arrayNode('reporting')
                     ->canBeEnabled()
                     ->addDefaultsIfNotSet()
@@ -148,11 +149,11 @@ class Configuration implements ConfigurationInterface
                             ->values(['mongodb', 'orm'])
                             ->defaultValue('mongodb')
                         ->end()
-                        
+
                         ->scalarNode('model_manager_name')
                             ->defaultNull()
                         ->end()
-                        
+
                         ->scalarNode('class_name')
                             ->defaultNull()
                             ->validate()
@@ -162,36 +163,36 @@ class Configuration implements ConfigurationInterface
                                 ->thenInvalid('The confguration value "oka_notifier_server.reporting.class_name" is not valid because "%s" class given must implement '.SendReportInterface::class.'.')
                             ->end()
                         ->end()
-                        
+
                         ->scalarNode('pagination_manager_name')
                             ->defaultValue('send_report')
                         ->end()
                     ->end()
                 ->end()
-                
+
                 ->scalarNode('logger_id')
                     ->defaultNull()
                 ->end()
             ->end();
-        
+
         return $treeBuilder;
     }
-    
+
     protected function validateChannel($value, array $options = []): bool
     {
         if (false === $value['enabled']) {
             return false;
         }
-        
+
         foreach ($options as $option) {
             if (false === isset($value[$option]) || null === $value[$option] || '' === $value[$option]) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     private function createInvalidChannelMessage(string $channel, array $options = []): string
     {
         return sprintf('The "oka_notifier_server.channels.%s" configuration cannot be enabled with the following options "%s" invalid.', $channel, implode(', ', $options));

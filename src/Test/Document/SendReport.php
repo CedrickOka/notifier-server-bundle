@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\Test\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;

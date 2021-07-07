@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\Test;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -21,10 +22,10 @@ class AppKernel extends Kernel
             new \Kreait\Firebase\Symfony\Bundle\FirebaseBundle(),
             new \Oka\Notifier\ServerBundle\OkaNotifierServerBundle(),
         ];
-        
+
         return $bundles;
     }
-    
+
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         // We don't need that Environment stuff, just one config

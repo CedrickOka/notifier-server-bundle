@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

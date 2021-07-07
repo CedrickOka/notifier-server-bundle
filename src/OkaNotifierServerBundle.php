@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
@@ -22,13 +23,13 @@ class OkaNotifierServerBundle extends Bundle
     {
         return \dirname(__DIR__);
     }
-    
+
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        
+
         $this->addRegisterMappingsPass($container);
-        
+
         $container->addCompilerPass(new CheckMailerEnabledPass());
         $container->addCompilerPass(new CheckGuzzleHttpEnabledPass());
         $container->addCompilerPass(new CheckFirebaseMessagingEnabledPass());
@@ -37,15 +38,15 @@ class OkaNotifierServerBundle extends Bundle
         $container->addCompilerPass(new MessengerPass());
         $container->addCompilerPass(new LoggerPass());
     }
-    
+
     private function addRegisterMappingsPass(ContainerBuilder $container)
     {
         $mapping = [realpath(__DIR__.'/../config/doctrine') => 'Oka\Notifier\ServerBundle\Model'];
-        
+
         if (true === class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')) {
             $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mapping, array('oka_notifier_server.reporting.model_manager_name'), 'oka_notifier_server.reporting.backend_type_orm'));
         }
-        
+
         if (true === class_exists('Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass')) {
             $container->addCompilerPass(DoctrineMongoDBMappingsPass::createXmlMappingDriver($mapping, array('oka_notifier_server.reporting.model_manager_name'), 'oka_notifier_server.reporting.backend_type_mongodb'));
         }

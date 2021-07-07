@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\Test\Document;
 
 use Doctrine\ORM\Mapping as ORM;

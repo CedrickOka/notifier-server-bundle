@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\Controller;
 
 use Oka\InputHandlerBundle\Annotation\AccessControl;
@@ -20,7 +21,7 @@ class SendReportController
     private $paginationManager;
     private $paginationManagerName;
     private $serializer;
-    
+
     public function __construct(SendReportManager $reportManager, PaginationManager $paginationManager, SerializerInterface $serializer, string $paginationManagerName)
     {
         $this->reportManager = $reportManager;
@@ -28,7 +29,7 @@ class SendReportController
         $this->serializer = $serializer;
         $this->paginationManagerName = $paginationManagerName;
     }
-    
+
     /**
      * Retrieve send report list
      *
@@ -44,7 +45,7 @@ class SendReportController
         } catch (\Oka\PaginationBundle\Exception\PaginationException $e) {
             throw new BadRequestHttpException($e->getMessage(), $e);
         }
-        
+
         return new JsonResponse(
             $this->serializer->serialize($page->toArray(), 'json', ['groups' => $request->query->has('details') ? ['details'] : ['summary']]),
             $page->getPageNumber() > 1 ? 206 : 200,
@@ -52,7 +53,7 @@ class SendReportController
             true
         );
     }
-    
+
     /**
      * Read send report details
      *
@@ -65,7 +66,7 @@ class SendReportController
         if (!$report = $this->reportManager->find($id)) {
             throw new NotFoundHttpException(sprintf('Send report with resource identifier "%s" is not found.', $id));
         }
-        
+
         return new JsonResponse($this->serializer->serialize($report, 'json', ['groups' => ['details']]), 200, [], true);
     }
 }

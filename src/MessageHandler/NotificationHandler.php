@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\MessageHandler;
 
 use Oka\Notifier\Message\Notification;
@@ -15,14 +16,14 @@ class NotificationHandler implements MessageHandlerInterface
     private $handlers;
     private $logger;
     private $reportManager;
-    
+
     public function __construct(iterable $handlers, SendReportManager $reportManager = null, LoggerInterface $logger = null)
     {
         $this->handlers = $handlers;
         $this->reportManager = $reportManager;
         $this->logger = $logger;
     }
-    
+
     public function __invoke(Notification $notification): void
     {
         /** @var \Oka\Notifier\ServerBundle\Channel\ChannelHandlerInterface $handler */
@@ -30,10 +31,10 @@ class NotificationHandler implements MessageHandlerInterface
             if (false === $handler->supports($notification)) {
                 continue;
             }
-            
+
             try {
                 $handler->send($notification);
-                
+
                 if (null !== $this->logger) {
                     $this->logger->info(
                         sprintf('Notification has been sended on channel "%s" to receiver "%s".', $handler::getName(), (string) $notification->getReceiver()),
@@ -48,21 +49,21 @@ class NotificationHandler implements MessageHandlerInterface
                         $this->createLogContext($notification)
                     );
                 }
-                
+
                 $sended = false;
             }
-            
+
             if (true === $sended && null !== $this->reportManager) {
                 $payload = $notification->toArray();
                 unset($payload['channels']);
-                
+
                 $this->reportManager->create($handler::getName(), $payload);
             }
-            
+
             $notification->removeChannel($handler::getName());
         }
     }
-    
+
     protected function createLogContext(Notification $notification): array
     {
         return [

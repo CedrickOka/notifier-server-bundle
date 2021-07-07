@@ -1,4 +1,5 @@
 <?php
+
 namespace Oka\Notifier\ServerBundle\Controller;
 
 use Oka\InputHandlerBundle\Annotation\AccessControl;
@@ -18,12 +19,12 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class NotificationController
 {
     private $bus;
-    
+
     public function __construct(MessageBusInterface $bus)
     {
         $this->bus = $bus;
     }
-    
+
     /**
      * Create notification
      *
@@ -38,16 +39,16 @@ class NotificationController
             $attributes = $notification['attributes'] ?? [];
             $sender = Address::create($notification['sender']);
             $receiver = Address::create($notification['receiver']);
-            
+
             $this->bus->dispatch(
                 new Notification($notification['channels'], $sender, $receiver, $notification['message'], $notification['title'] ?? null, $attributes),
                 [new AmqpStamp(null, AMQP_NOPARAM, ['delivery_mode' => AMQP_DURABLE, 'priority' => $attributes['priority'] ?? 0])]
             );
         }
-        
+
         return new JsonResponse(null, 204);
     }
-    
+
     private static function createConstraints(): Assert\Collection
     {
         $addressConstriants = new Assert\Callback(['callback' => function ($object, ExecutionContextInterface $context, $payload) {
@@ -59,11 +60,11 @@ class NotificationController
             } else {
                 $constraints = new Assert\NotBlank();
             }
-            
+
             $validator = $context->getValidator()->inContext($context);
             $validator->validate($object, $constraints);
         }]);
-        
+
         return new Assert\Collection([
             'notifications' => new Assert\All(
                 new Assert\Collection([
