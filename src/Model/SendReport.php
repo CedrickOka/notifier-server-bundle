@@ -5,7 +5,7 @@ namespace Oka\Notifier\ServerBundle\Model;
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
-abstract class AbstractSendReport implements SendReportInterface
+abstract class SendReport implements SendReportInterface
 {
     /**
      * @var string
