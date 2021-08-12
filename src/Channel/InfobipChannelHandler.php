@@ -14,7 +14,7 @@ use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
 class InfobipChannelHandler implements SmsChannelHandlerInterface
 {
     /**
-     * @var \GuzzleHttp\Client
+     * @var \GuzzleHttp\ClientInterface
      */
     private $httpClient;
 

@@ -98,13 +98,13 @@ oka_notifier_server:
         sms:
             enabled: true
         smpp:
-            dsn: 'smpp://localhost'
+            dsn: '%env(resolve:NOTIFIER_SMPP_DSN)%'
         clickatell:
-            url: 'http://localhost'
-            token: 'secret'
+            url: '%env(resolve:NOTIFIER_CLICKATELL_URL)%'
+            token: '%env(NOTIFIER_CLICKATELL_API_TOKEN)%'
         infobip:
-            url: 'http://localhost'
-            api_key: 'secret'
+            url: '%env(resolve:NOTIFIER_INFOBIP_URL)%'
+            api_key: '%env(NOTIFIER_INFOBIP_API_KEY)%'
         firebase:
             enabled: true
     reporting:
