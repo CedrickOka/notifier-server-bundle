@@ -42,11 +42,13 @@ class InfobipChannelHandler implements SmsChannelHandlerInterface
             $response = $this->httpClient->post('/sms/2/text/advanced', [
                 RequestOptions::JSON => [
                     'messages' => [
-                        'from' => $notification->getSender()->getValue(),
-                        'destinations' => [
-                            'to' => $notification->getReceiver()->getValue()
-                       ],
-                       'text' => $notification->getMessage()
+                        [
+                            'from' => $notification->getSender()->getValue(),
+                            'destinations' => [
+                                ['to' => $notification->getReceiver()->getValue()]
+                            ],
+                            'text' => $notification->getMessage()
+                        ]
                     ]
                 ]
             ]);

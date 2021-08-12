@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+#### 1.2.1 (2021-08-12)
+
+* Fixed infobip channel handler implementation.
+
+#### 1.2.0 (2021-08-12)
+
+* Improve unit test.
+
 #### 1.1.1 (2021-06-10)
 
 * Fixed doctrine mogondb odm mapping.
