@@ -5,17 +5,21 @@
       <directory suffix=".php">src</directory>
     </include>
   </coverage>
+  
   <php>
     <env name="KERNEL_CLASS" value="Oka\Notifier\ServerBundle\Test\AppKernel"/>
     <env name="DATABASE_URL" value="mysql://root:root@127.0.0.1:3306/notifier?serverVersion=5.7"/>
     <env name="MONGODB_URL" value="mongodb://root:root@localhost:27017"/>
     <env name="MONGODB_DB" value="notifier"/>
+    <env name="SENDER_ADDRESS" value="test"/>
+    <env name="RECEIVER_ADDRESS" value="2250505050505"/>
     <env name="NOTIFIER_SMPP_DSN" value="smpp://597019:LBIJVQ@smscsim.melroselabs.com:8775"/>
     <env name="NOTIFIER_CLICKATELL_URL" value="https://api.clickatell.com"/>
-    <env name="NOTIFIER_CLICKATELL_API_TOKEN" value="s$cretf0rt3st'"/>
+    <env name="NOTIFIER_CLICKATELL_API_TOKEN" value="s$cretf0rt3st"/>
     <env name="NOTIFIER_INFOBIP_URL" value="https://api.infobip.com"/>
-    <env name="NOTIFIER_INFOBIP_API_KEY" value="s$cretf0rt3st'"/>
+    <env name="NOTIFIER_INFOBIP_API_KEY" value="s$cretf0rt3st"/>
   </php>
+  
   <testsuites>
     <testsuite name="default">
       <directory suffix="Test.php">tests</directory>

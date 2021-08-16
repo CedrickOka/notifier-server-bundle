@@ -36,6 +36,6 @@ class InfobipChannelHandlerTest extends KernelTestCase
         $reflProperty->setAccessible(true);
         $reflProperty->setValue($this->handler, $this->createMock(Client::class));
 
-        $this->handler->send(new Notification(['sms', 'infobip'], Address::create('test'), Address::create('2250554020558'), 'Hello World!'));
+        $this->handler->send(new Notification(['sms', 'infobip'], Address::create('test'), Address::create(getenv('RECEIVER_ADDRESS')), 'Hello World!'));
     }
 }

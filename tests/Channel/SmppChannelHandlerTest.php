@@ -37,6 +37,6 @@ class SmppChannelHandlerTest extends KernelTestCase
      */
     public function testThatHandlerCanWeSendNotification(): void
     {
-        $this->handler->send(new Notification(['smpp'], Address::create('0707'), Address::create('09970126'), 'Hello World!'));
+        $this->handler->send(new Notification(['smpp'], Address::create('0707'), Address::create(getenv('PHONE_NUMBER')), 'Hello World!'));
     }
 }

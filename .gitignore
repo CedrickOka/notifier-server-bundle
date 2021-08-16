@@ -5,6 +5,7 @@
 .phpunit.*
 composer.lock
 composer.phar
+/phpunit.xml
 /var/
 /vendor/*
 !/vendor/onlinecity/

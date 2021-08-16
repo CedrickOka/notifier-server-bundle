@@ -42,8 +42,9 @@ class ClickatellChannelHandler implements SmsChannelHandlerInterface
             /** @var \Psr\Http\Message\ResponseInterface $response */
             $response = $this->httpClient->post('/rest/message', [
                 RequestOptions::JSON => [
-                    'content' => $notification->getMessage(),
-                    'to' => [$notification->getReceiver()->getValue()]
+                    'from' => $notification->getSender()->getValue(),
+                    'text' => $notification->getMessage(),
+                    'to' => [$notification->getReceiver()->getValue()],
                 ]
             ]);
         } catch (ClientException $e) {

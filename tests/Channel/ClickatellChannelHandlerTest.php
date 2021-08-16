@@ -29,5 +29,7 @@ class ClickatellChannelHandlerTest extends KernelTestCase
     {
         $this->assertEquals(true, $this->handler->supports(new Notification(['sms', 'clickatell'], Address::create('test'), Address::create('test'), 'Hello World!')));
         $this->assertEquals(false, $this->handler->supports(new Notification(['sms'], Address::create('test'), Address::create('test'), 'Hello World!')));
+        
+        $this->handler->send(new Notification(['clickatell'], Address::create(getenv('SENDER_ADDRESS')), Address::create(getenv('RECEIVER_ADDRESS')), 'Hello World!'));
     }
 }
