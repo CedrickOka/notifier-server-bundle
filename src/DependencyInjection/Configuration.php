@@ -87,7 +87,27 @@ class Configuration implements ConfigurationInterface
                                     ->defaultNull()
                                 ->end()
                             ->end()
-                        ->end()
+                            ->end()
+                            
+                            ->arrayNode('wirepick')
+                                ->addDefaultsIfNotSet()
+                                ->canBeEnabled()
+                                ->validate()
+                                    ->ifTrue(function ($v) {
+                                        return $this->validateChannel($v, ['client_id', 'password']);
+                                    })
+                                    ->thenInvalid($this->createInvalidChannelMessage('wirepick', ['client_id', 'password']))
+                                ->end()
+                                ->children()
+                                    ->scalarNode('client_id')
+                                        ->defaultNull()
+                                    ->end()
+                                    
+                                    ->scalarNode('password')
+                                        ->defaultNull()
+                                    ->end()
+                                ->end()
+                            ->end()
 
                         ->arrayNode('firebase')
                             ->addDefaultsIfNotSet()

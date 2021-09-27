@@ -20,6 +20,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Oka\Notifier\ServerBundle\Channel\WirepickChannelHandler;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
@@ -60,46 +61,55 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
         }
 
         if (true === $this->isConfigEnabled($container, $config['channels']['sms'])) {
-            $emailChannelDefinition = $container->setDefinition('oka_notifier_server.channel.sms_handler', new Definition(
+            $smsChannelDefinition = $container->setDefinition('oka_notifier_server.channel.sms_handler', new Definition(
                 SmsChannelHandler::class,
                 [new TaggedIteratorArgument('oka_notifier_server.channel_handler_sms')]
             ));
-            $emailChannelDefinition->addTag('oka_notifier_server.channel_handler');
+            $smsChannelDefinition->addTag('oka_notifier_server.channel_handler');
         }
 
         if (true === $this->isConfigEnabled($container, $config['channels']['smpp'])) {
-            $emailChannelDefinition = $container->setDefinition('oka_notifier_server.channel.smpp_handler', new Definition(
+            $smppChannelDefinition = $container->setDefinition('oka_notifier_server.channel.smpp_handler', new Definition(
                 SmppChannelHandler::class,
                 [$config['channels']['smpp']['dsn'], new Parameter('kernel.debug')]
             ));
-            $emailChannelDefinition->addTag('oka_notifier_server.channel_handler');
-            $emailChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 15]);
+            $smppChannelDefinition->addTag('oka_notifier_server.channel_handler');
+            $smppChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 15]);
         }
 
         if (true === $this->isConfigEnabled($container, $config['channels']['infobip'])) {
-            $emailChannelDefinition = $container->setDefinition('oka_notifier_server.channel.infobip_handler', new Definition(
+            $infobipChannelDefinition = $container->setDefinition('oka_notifier_server.channel.infobip_handler', new Definition(
                 InfobipChannelHandler::class,
                 [$config['channels']['infobip']['url'], $config['channels']['infobip']['api_key'], new Parameter('kernel.debug')]
             ));
-            $emailChannelDefinition->addTag('oka_notifier_server.channel_handler');
-            $emailChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 10]);
+            $infobipChannelDefinition->addTag('oka_notifier_server.channel_handler');
+            $infobipChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 10]);
         }
 
         if (true === $this->isConfigEnabled($container, $config['channels']['clickatell'])) {
-            $emailChannelDefinition = $container->setDefinition('oka_notifier_server.channel.clickatell_handler', new Definition(
+            $clickatellChannelDefinition = $container->setDefinition('oka_notifier_server.channel.clickatell_handler', new Definition(
                 ClickatellChannelHandler::class,
                 [$config['channels']['clickatell']['url'], $config['channels']['clickatell']['token'], new Parameter('kernel.debug')]
             ));
-            $emailChannelDefinition->addTag('oka_notifier_server.channel_handler');
-            $emailChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 5]);
+            $clickatellChannelDefinition->addTag('oka_notifier_server.channel_handler');
+            $clickatellChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 5]);
+        }
+        
+        if (true === $this->isConfigEnabled($container, $config['channels']['wirepick'])) {
+            $wirepickChannelDefinition = $container->setDefinition('oka_notifier_server.channel.wirepick_handler', new Definition(
+                WirepickChannelHandler::class,
+                [$config['channels']['wirepick']['client_id'], $config['channels']['wirepick']['password'], new Parameter('kernel.debug')]
+            ));
+            $wirepickChannelDefinition->addTag('oka_notifier_server.channel_handler');
+            $wirepickChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 0]);
         }
 
         if (true === $this->isConfigEnabled($container, $config['channels']['firebase'])) {
-            $emailChannelDefinition = $container->setDefinition('oka_notifier_server.channel.firebase_handler', new Definition(
+            $firebaseChannelDefinition = $container->setDefinition('oka_notifier_server.channel.firebase_handler', new Definition(
                 FirebaseChannelHandler::class,
                 [new Reference($config['channels']['firebase']['messaging_id'])]
             ));
-            $emailChannelDefinition->addTag('oka_notifier_server.channel_handler');
+            $firebaseChannelDefinition->addTag('oka_notifier_server.channel_handler');
         }
 
         $container->setParameter('oka_notifier_server.messenger.bus_id', $config['messenger']['bus_id']);
