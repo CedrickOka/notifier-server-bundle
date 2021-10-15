@@ -30,7 +30,7 @@ class Configuration implements ConfigurationInterface
 
                         ->arrayNode('sms')
                             ->addDefaultsIfNotSet()
-                            ->canBeDisabled()
+                            ->canBeEnabled()
                         ->end()
 
                         ->arrayNode('smpp')
