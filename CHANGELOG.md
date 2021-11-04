@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+#### 1.3.2 (2021-11-04)
+
+* Fixed wirepick channel handler implementation.
+
 #### 1.2.1 (2021-08-12)
 
 * Fixed infobip channel handler implementation.

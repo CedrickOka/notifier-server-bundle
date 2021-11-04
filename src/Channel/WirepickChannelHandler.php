@@ -13,7 +13,7 @@ use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
  */
 class WirepickChannelHandler implements SmsChannelHandlerInterface
 {
-    private $clientId;
+    private $username;
     private $password;
     
     /**
@@ -21,12 +21,12 @@ class WirepickChannelHandler implements SmsChannelHandlerInterface
      */
     private $httpClient;
 
-    public function __construct(string $clientId, string $password, bool $debug)
+    public function __construct(string $username, string $password, bool $debug)
     {
-        $this->clientId = $clientId;
+        $this->username = $username;
         $this->password = $password;
         $this->httpClient = new Client([
-            'base_uri' => $url,
+            'base_uri' => 'https://api.wirepick.com',
             RequestOptions::DEBUG => $debug,
         ]);
     }
@@ -42,7 +42,7 @@ class WirepickChannelHandler implements SmsChannelHandlerInterface
             /** @var \Psr\Http\Message\ResponseInterface $response */
             $response = $this->httpClient->post('/httpsms/send', [
                 RequestOptions::QUERY => [
-                    'client' => $this->clientId,
+                    'client' => $this->username,
                     'password' => $this->password,
                     'from' => $notification->getSender()->getValue(),
                     'phone' => $notification->getReceiver()->getValue(),
