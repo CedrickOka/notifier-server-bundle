@@ -18,6 +18,8 @@
     <env name="NOTIFIER_CLICKATELL_API_TOKEN" value="s$cretf0rt3st"/>
     <env name="NOTIFIER_INFOBIP_URL" value="https://api.infobip.com"/>
     <env name="NOTIFIER_INFOBIP_API_KEY" value="s$cretf0rt3st"/>
+    <env name="NOTIFIER_WIREPICK_CLIENT_ID" value="username"/>
+    <env name="NOTIFIER_WIREPICK_PASSWORD" value="s$cretf0rt3st"/>
   </php>
   
   <testsuites>

@@ -151,6 +151,9 @@ oka_notifier_server:
         infobip:
             url: 'http://localhost'
             api_key: 'secret'
+        wirepick:
+            client_id: 'username'
+            password: 's$cretf0rt3st'
         firebase:
             enabled: true
     reporting:
