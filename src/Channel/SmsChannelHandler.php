@@ -10,7 +10,7 @@ use Oka\Notifier\Message\Notification;
 class SmsChannelHandler implements ChannelHandlerInterface
 {
     private $handlers;
-    private static $name = 'sms';
+    private $delegateHandlerName;
 
     public function __construct(iterable $handlers)
     {
@@ -30,10 +30,9 @@ class SmsChannelHandler implements ChannelHandlerInterface
         foreach ($this->handlers as $handler) {
             try {
                 $handler->send($notification);
+                $this->delegateHandlerName = $handler::getName();
                 
-                static::$name = $handler::getName();
                 $lastError = null;
-                
                 break;
             } catch (\Exception $e) {
                 $lastError = $e;
@@ -44,9 +43,17 @@ class SmsChannelHandler implements ChannelHandlerInterface
             throw $lastError;
         }
     }
+    
+    /**
+     * Gets the delegate channel handler name
+     */
+    public function getDelegateHandlerName(): ?string
+    {
+        return $this->delegateHandlerName;
+    }
 
     public static function getName(): string
     {
-        return static::$name;
+        return 'sms';
     }
 }

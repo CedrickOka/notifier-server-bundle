@@ -7,6 +7,8 @@ use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
 use Oka\Notifier\ServerBundle\Service\SendReportManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
+use Oka\Notifier\ServerBundle\Channel\SmsChannelHandler;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
@@ -26,6 +28,8 @@ class NotificationHandler implements MessageHandlerInterface
 
     public function __invoke(Notification $notification): void
     {
+        $noHandlerSelected = true;
+        
         /** @var \Oka\Notifier\ServerBundle\Channel\ChannelHandlerInterface $handler */
         foreach ($this->handlers as $handler) {
             if (false === $handler->supports($notification)) {
@@ -41,7 +45,9 @@ class NotificationHandler implements MessageHandlerInterface
                         $this->createLogContext($notification)
                     );
                 }
+                
                 $sended = true;
+                $noHandlerSelected = false;
             } catch (InvalidNotificationException $e) {
                 if (null !== $this->logger) {
                     $this->logger->error(
@@ -52,15 +58,22 @@ class NotificationHandler implements MessageHandlerInterface
 
                 $sended = false;
             }
-
+            
             if (true === $sended && null !== $this->reportManager) {
                 $payload = $notification->toArray();
                 unset($payload['channels']);
-
-                $this->reportManager->create($handler::getName(), $payload);
+                
+                $this->reportManager->create(
+                    $handler instanceof SmsChannelHandler ? $handler->getDelegateHandlerName() ?? $handler->getName() : $handler->getName(), 
+                    $payload
+                );
             }
 
-            $notification->removeChannel($handler::getName());
+            $notification->removeChannel($handler->getName());
+        }
+        
+        if (true === $noHandlerSelected) {
+            throw new UnrecoverableMessageHandlingException('No handler was able to send this notification.');
         }
     }
 
