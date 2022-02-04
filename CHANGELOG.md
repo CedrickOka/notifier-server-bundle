@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+#### 1.5.0 (2022-04-02)
+
+* Updated bundle directory structure.
+
 #### 1.3.2 (2021-11-04)
 
 * Fixed wirepick channel handler implementation.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oka\Notifier\ServerBundle\Test;
+namespace Oka\Notifier\ServerBundle\Tests;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;

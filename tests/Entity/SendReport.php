@@ -1,6 +1,6 @@
 <?php
 
-namespace Oka\Notifier\ServerBundle\Test\Document;
+namespace Oka\Notifier\ServerBundle\Tests\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oka\Notifier\ServerBundle\Model\SendReport as BaseSendReport;

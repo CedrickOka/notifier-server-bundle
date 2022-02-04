@@ -1,6 +1,6 @@
 <?php
 
-namespace Oka\Notifier\ServerBundle\Test\Document;
+namespace Oka\Notifier\ServerBundle\Tests\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Oka\Notifier\ServerBundle\Model\SendReport as BaseSendReport;

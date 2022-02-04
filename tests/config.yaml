@@ -22,7 +22,7 @@ framework:
         # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
         #app: cache.adapter.apcu
     router:
-        resource: routes.yaml
+        resource: '%kernel.project_dir%/tests/routes.yaml'
         utf8: true
 
 doctrine:
@@ -40,8 +40,8 @@ doctrine:
             App:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/Test/Entity'
-                prefix: 'Oka\Notifier\ServerBundle\Test\Entity'
+                dir: '%kernel.project_dir%/tests/Entity'
+                prefix: 'Oka\Notifier\ServerBundle\Tests\Entity'
                 alias: App
 
 doctrine_mongodb:
@@ -59,8 +59,8 @@ doctrine_mongodb:
                 App:
                     is_bundle: false
                     type: annotation
-                    dir: '%kernel.project_dir%/src/Test/Document'
-                    prefix: 'Oka\Notifier\ServerBundle\Test\Document'
+                    dir: '%kernel.project_dir%/tests/Document'
+                    prefix: 'Oka\Notifier\ServerBundle\Tests\Document'
                     alias: App
 
 kreait_firebase:
@@ -80,14 +80,14 @@ oka_pagination:
     pagination_managers:
         send_report_orm:
             db_driver: orm
-            class: Oka\Notifier\ServerBundle\Test\Entity\SendReport
+            class: Oka\Notifier\ServerBundle\Tests\Entity\SendReport
             filters:
                 channel:
                     searchable: true
                     orderable: true
         send_report:
             db_driver: mongodb
-            class: Oka\Notifier\ServerBundle\Test\Document\SendReport
+            class: Oka\Notifier\ServerBundle\Tests\Document\SendReport
             filters:
                 channel:
                     searchable: true
@@ -111,4 +111,4 @@ oka_notifier_server:
         firebase:
             enabled: true
     reporting:
-        class_name: Oka\Notifier\ServerBundle\Test\Document\SendReport
+        class_name: Oka\Notifier\ServerBundle\Tests\Document\SendReport
