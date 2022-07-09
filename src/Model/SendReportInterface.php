@@ -19,5 +19,5 @@ interface SendReportInterface
 
     public function getIssuedAt(): \DateTimeInterface;
 
-    public function setIssuedAt(\DateTimeInterface $channel): self;
+    public function setIssuedAt(\DateTimeInterface $issuedAt): self;
 }

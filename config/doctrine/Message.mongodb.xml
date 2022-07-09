@@ -4,14 +4,20 @@
       xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                     http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
                     
-    <mapped-superclass name="Oka\Notifier\ServerBundle\Model\SendReport">
-        <field field-name="channel" name="channel" type="string" />
-        <field field-name="paylaod" name="paylaod" type="hash" />
+    <mapped-superclass name="Oka\Notifier\ServerBundle\Model\Message">
+    	<embed-one field="from" target-document="Oka\Notifier\ServerBundle\Model\Address" />
+    	<embed-one field="to" target-document="Oka\Notifier\ServerBundle\Model\Address" />
+        <field field-name="subject" name="subject" type="string" nullable="true" />
+        <field field-name="body" name="body" type="string" />
         <field field-name="issuedAt" name="issued_at" type="date" />
 
         <indexes>
             <index unique="false">
-                <key name="channel" order="asc" />
+                <key name="from.value" order="asc" />
+                <option name="background" value="true" />
+            </index>
+            <index unique="false">
+                <key name="to.value" order="asc" />
                 <option name="background" value="true" />
             </index>
         </indexes>

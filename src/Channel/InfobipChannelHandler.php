@@ -3,8 +3,8 @@
 namespace Oka\Notifier\ServerBundle\Channel;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\RequestOptions;
 use Oka\Notifier\Message\Notification;
 use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
 
@@ -25,8 +25,8 @@ class InfobipChannelHandler implements SmsChannelHandlerInterface
             RequestOptions::DEBUG => $debug,
             RequestOptions::HEADERS => [
                 'Accept' => 'application/json',
-                'Authorization' => sprintf('App %s', $apiKey)
-            ]
+                'Authorization' => sprintf('App %s', $apiKey),
+            ],
         ]);
     }
 
@@ -45,12 +45,12 @@ class InfobipChannelHandler implements SmsChannelHandlerInterface
                         [
                             'from' => $notification->getSender()->getValue(),
                             'destinations' => [
-                                ['to' => $notification->getReceiver()->getValue()]
+                                ['to' => $notification->getReceiver()->getValue()],
                             ],
-                            'text' => $notification->getMessage()
-                        ]
-                    ]
-                ]
+                            'text' => $notification->getMessage(),
+                        ],
+                    ],
+                ],
             ]);
         } catch (ClientException $e) {
             throw new InvalidNotificationException(null, null, $e);

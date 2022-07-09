@@ -1,0 +1,13 @@
+services:
+    oka_notifier_server.message_manager:
+        class: Oka\Notifier\ServerBundle\Service\MessageManager
+        arguments: ['', '%oka_notifier_server.channel.local.class_name%']
+
+    oka_notifier_server.message_controller:
+        public: true
+        class: Oka\Notifier\ServerBundle\Controller\MessageController
+        arguments: ['@oka_notifier_server.message_manager', '@oka_pagination.pagination_manager', '@serializer', '%oka_notifier_server.channel.local.pagination_manager_name%']
+
+    Oka\Notifier\ServerBundle\Controller\MessageController:
+        public: true
+        alias: 'oka_notifier_server.message_controller'

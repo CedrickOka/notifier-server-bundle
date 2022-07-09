@@ -72,29 +72,39 @@ oka_pagination:
     db_driver: mongodb
     filters:
         issuedAt:
-            searchable: true
-            orderable: true
+            cast_type: string
     sort:
         order:
             issuedAt: desc
     pagination_managers:
-        send_report_orm:
-            db_driver: orm
-            class: Oka\Notifier\ServerBundle\Tests\Entity\SendReport
+        message:
+            db_driver: mongodb
+            class: Oka\Notifier\ServerBundle\Tests\Document\Message
             filters:
-                channel:
-                    searchable: true
-                    orderable: true
+                from:
+                    property_name: from.value
+                    cast_type: string
+                to:
+                    property_name: to.value
+                    cast_type: string
         send_report:
             db_driver: mongodb
             class: Oka\Notifier\ServerBundle\Tests\Document\SendReport
             filters:
                 channel:
-                    searchable: true
-                    orderable: true
+                    cast_type: string
+        send_report_orm:
+            db_driver: orm
+            class: Oka\Notifier\ServerBundle\Tests\Entity\SendReport
+            filters:
+                channel:
+                    cast_type: string
 
 oka_notifier_server:
     channels:
+        local:
+            enabled: true
+            class_name: Oka\Notifier\ServerBundle\Tests\Document\Message
         sms:
             enabled: true
         smpp:

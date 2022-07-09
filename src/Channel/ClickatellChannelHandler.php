@@ -3,8 +3,8 @@
 namespace Oka\Notifier\ServerBundle\Channel;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\RequestOptions;
 use Oka\Notifier\Message\Notification;
 use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
 
@@ -26,8 +26,8 @@ class ClickatellChannelHandler implements SmsChannelHandlerInterface
             RequestOptions::HEADERS => [
                 'X-Version' => '1',
                 'Accept' => 'application/json',
-                'Authorization' => sprintf('Bearer %s', $token)
-            ]
+                'Authorization' => sprintf('Bearer %s', $token),
+            ],
         ]);
     }
 
@@ -45,7 +45,7 @@ class ClickatellChannelHandler implements SmsChannelHandlerInterface
                     'from' => $notification->getSender()->getValue(),
                     'text' => $notification->getMessage(),
                     'to' => [$notification->getReceiver()->getValue()],
-                ]
+                ],
             ]);
         } catch (ClientException $e) {
             throw new InvalidNotificationException(null, null, $e);

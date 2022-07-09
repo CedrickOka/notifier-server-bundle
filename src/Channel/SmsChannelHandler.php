@@ -31,7 +31,7 @@ class SmsChannelHandler implements ChannelHandlerInterface
             try {
                 $handler->send($notification);
                 $this->delegateHandlerName = $handler::getName();
-                
+
                 $lastError = null;
                 break;
             } catch (\Exception $e) {
@@ -43,9 +43,9 @@ class SmsChannelHandler implements ChannelHandlerInterface
             throw $lastError;
         }
     }
-    
+
     /**
-     * Gets the delegate channel handler name
+     * Gets the delegate channel handler name.
      */
     public function getDelegateHandlerName(): ?string
     {

@@ -3,8 +3,8 @@
 namespace Oka\Notifier\ServerBundle\Channel;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\RequestOptions;
 use Oka\Notifier\Message\Notification;
 use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
 
@@ -15,7 +15,7 @@ class WirepickChannelHandler implements SmsChannelHandlerInterface
 {
     private $username;
     private $password;
-    
+
     /**
      * @var \GuzzleHttp\ClientInterface
      */
@@ -47,7 +47,7 @@ class WirepickChannelHandler implements SmsChannelHandlerInterface
                     'from' => $notification->getSender()->getValue(),
                     'phone' => $notification->getReceiver()->getValue(),
                     'text' => $notification->getMessage(),
-                ]
+                ],
             ]);
         } catch (ClientException $e) {
             throw new InvalidNotificationException(null, null, $e);

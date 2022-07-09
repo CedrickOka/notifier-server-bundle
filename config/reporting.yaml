@@ -1,8 +1,12 @@
 services:
+    oka_notifier_server.send_report_manager:
+        class: Oka\Notifier\ServerBundle\Service\SendReportManager
+        arguments: ['', '%oka_notifier_server.reporting.class_name%']
+
     oka_notifier_server.send_report_controller:
         public: true
         class: Oka\Notifier\ServerBundle\Controller\SendReportController
-        arguments: ['', '@oka_pagination.pagination_manager', '@serializer', '%oka_notifier_server.reporting.pagination_manager_name%']
+        arguments: ['@oka_notifier_server.send_report_manager', '@oka_pagination.pagination_manager', '@serializer', '%oka_notifier_server.reporting.pagination_manager_name%']
 
     Oka\Notifier\ServerBundle\Controller\SendReportController:
         public: true

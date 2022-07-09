@@ -10,17 +10,17 @@ use Oka\Notifier\Message\Notification;
 interface ChannelHandlerInterface
 {
     /**
-     * Checks if channel handler supports notification
+     * Checks if channel handler supports notification.
      */
     public function supports(Notification $notification): bool;
 
     /**
-     * Send notification
+     * Send notification.
      */
     public function send(Notification $notification): void;
 
     /**
-     * Gets the channel handler name
+     * Gets the channel handler name.
      */
     public static function getName(): string;
 }

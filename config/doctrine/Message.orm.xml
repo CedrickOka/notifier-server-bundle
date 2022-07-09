@@ -4,13 +4,16 @@
       xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
                           
-    <mapped-superclass name="Oka\Notifier\ServerBundle\Model\SendReport">
-        <field name="channel" column="channel" type="string" length="32" />
-        <field name="paylaod" column="paylaod" type="json" />
+    <mapped-superclass name="Oka\Notifier\ServerBundle\Model\Message">
+    	<embedded name="from" class="Oka\Notifier\ServerBundle\Model\Address" column-prefix="from_" />
+    	<embedded name="to" class="Oka\Notifier\ServerBundle\Model\Address" column-prefix="to_" />
+        <field name="subject" column="subject" type="string" nullable="true" />
+        <field name="body" column="body" type="text" />
         <field name="issuedAt" column="issued_at" type="datetime" />
 
         <indexes>
-            <index name="channel_idx" columns="channel"/>
+            <index name="from_value_idx" columns="from_value"/>
+            <index name="to_value_idx" columns="to_value"/>
         </indexes>
 
         <lifecycle-callbacks>

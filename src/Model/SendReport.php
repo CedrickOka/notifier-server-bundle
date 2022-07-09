@@ -40,6 +40,7 @@ abstract class SendReport implements SendReportInterface
     public function setChannel(string $channel): self
     {
         $this->channel = $channel;
+
         return $this;
     }
 
@@ -51,6 +52,7 @@ abstract class SendReport implements SendReportInterface
     public function setPaylaod(array $paylaod): self
     {
         $this->paylaod = $paylaod;
+
         return $this;
     }
 
@@ -62,6 +64,7 @@ abstract class SendReport implements SendReportInterface
     public function setIssuedAt(\DateTimeInterface $issuedAt): self
     {
         $this->issuedAt = $issuedAt;
+
         return $this;
     }
 

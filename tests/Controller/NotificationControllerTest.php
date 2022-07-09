@@ -34,7 +34,7 @@ class NotificationControllerTest extends WebTestCase
     public function testCanSendNotificatonOnSMSChannel()
     {
         $this->client->request('POST', '/v1/rest/notifications', [], [], [
-            'CONTENT_TYPE' => 'application/json'
+            'CONTENT_TYPE' => 'application/json',
         ], '{"notifications": [{"channels": ["sms"], "sender": "MTN DRIVE", "receiver": "22554020558", "message": "Hello World!"}]}');
 
         $this->assertResponseStatusCodeSame(204);
@@ -47,7 +47,7 @@ class NotificationControllerTest extends WebTestCase
     public function testCannotSendNotificatonWithAWrongReceiver()
     {
         $this->client->request('POST', '/v1/rest/notifications', [], [], [
-            'CONTENT_TYPE' => 'application/json'
+            'CONTENT_TYPE' => 'application/json',
         ], '{"notifications": [{"channels": ["sms"], "sender": "MTN DRIVE", "receiver": {"name": "22554020558"}, "message": "Hello World!"}]}');
 
         $this->assertResponseStatusCodeSame(400);

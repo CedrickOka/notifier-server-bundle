@@ -5,13 +5,13 @@
 	"homepage" : "https://github.com/CedrickOka/notifier-server-bundle",
 	"keywords" : [
 		"notification",
-		"REST API",
+		"REST",
 		"messenger"
 	],
 	"license" : "MIT",
 	"autoload" : {
 		"psr-4" : {
-			"Oka\\Notifier\\ServerBundle\\" : "src"
+			"Oka\\Notifier\\ServerBundle\\" : "src/"
 		},
 		"files" : [
 			"vendor/onlinecity/php-smpp/autoload.php"
@@ -26,7 +26,7 @@
 		}
 	},
 	"require" : {
-		"php" : ">=7.2",
+		"php" : ">=7.4",
 		"coka/input-handler-bundle" : "^1.2",
 		"coka/notifier-message" : "^1.0",
 		"doctrine/annotations" : "^1.0",
@@ -46,6 +46,7 @@
 		"doctrine/doctrine-migrations-bundle": "^3.2",
 		"doctrine/mongodb-odm-bundle": "^4.3",
 		"doctrine/orm": "^2.11",
+		"friendsofphp/php-cs-fixer": "^3",
 		"guzzlehttp/guzzle": "^7.3",
 		"kreait/firebase-bundle": "^2.4",
 		"symfony/browser-kit": "^4.4 || ^5.4",
@@ -53,7 +54,7 @@
 		"symfony/mailer": "^4.4 || ^5.4",
 		"symfony/monolog-bundle": "^3.7",
 		"symfony/phpunit-bridge": "^4.4 || ^5.4",
-		"symfony/proxy-manager-bridge": "^5.4"
+		"symfony/proxy-manager-bridge": "^4.4 || ^5.4"
 	},
 	"suggest" : {
 		"coka/pagination-bundle" : "^5.8",

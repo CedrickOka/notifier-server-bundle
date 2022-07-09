@@ -2,14 +2,14 @@
 
 namespace Oka\Notifier\ServerBundle\Channel;
 
-use Oka\Notifier\Message\Notification;
-use Oka\Notifier\ServerBundle\Exception\InvalidNotificationAddressException;
-use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
 use gateway\protocol\GsmEncoder;
 use gateway\protocol\SmppClient;
 use gateway\protocol\SmppException;
 use gateway\transport\TSocket;
 use gateway\transport\TTransportException;
+use Oka\Notifier\Message\Notification;
+use Oka\Notifier\ServerBundle\Exception\InvalidNotificationAddressException;
+use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>

@@ -8,39 +8,26 @@ use Oka\Notifier\ServerBundle\Channel\ClickatellChannelHandler;
 use Oka\Notifier\ServerBundle\Channel\EmailChannelHandler;
 use Oka\Notifier\ServerBundle\Channel\FirebaseChannelHandler;
 use Oka\Notifier\ServerBundle\Channel\InfobipChannelHandler;
+use Oka\Notifier\ServerBundle\Channel\LocalChannelHandler;
 use Oka\Notifier\ServerBundle\Channel\SmppChannelHandler;
 use Oka\Notifier\ServerBundle\Channel\SmsChannelHandler;
 use Oka\Notifier\ServerBundle\Channel\SmsChannelHandlerInterface;
+use Oka\Notifier\ServerBundle\Channel\WirepickChannelHandler;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Oka\Notifier\ServerBundle\Channel\WirepickChannelHandler;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
 class OkaNotifierServerExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * @var array
-     */
-    public static $doctrineDrivers = [
-        'orm' => [
-            'registry' => 'doctrine',
-            'tag' => 'doctrine.event_subscriber',
-        ],
-        'mongodb' => [
-            'registry' => 'doctrine_mongodb',
-            'tag' => 'doctrine_mongodb.odm.event_subscriber',
-        ],
-    ];
-
     /**
      * {@inheritDoc}
      */
@@ -51,6 +38,22 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.yaml');
+
+        if (true === $this->isConfigEnabled($container, $config['channels']['local'])) {
+            $container->setParameter('oka_notifier_server.channel.local.db_driver', $config['channels']['local']['db_driver']);
+            $container->setParameter('oka_notifier_server.channel.local.backend_type_'.$config['channels']['local']['db_driver'], true);
+            $container->setParameter('oka_notifier_server.channel.local.model_manager_name', $config['channels']['local']['model_manager_name']);
+            $container->setParameter('oka_notifier_server.channel.local.class_name', $config['channels']['local']['class_name']);
+            $container->setParameter('oka_notifier_server.channel.local.pagination_manager_name', $config['channels']['local']['pagination_manager_name']);
+
+            $loader->load('message.yaml');
+
+            $localChannelDefinition = $container->setDefinition('oka_notifier_server.channel.local_handler'::class, new Definition(
+                LocalChannelHandler::class,
+                [new Reference('oka_notifier_server.message_manager')]
+            ));
+            $localChannelDefinition->addTag('oka_notifier_server.channel_handler');
+        }
 
         if (true === $this->isConfigEnabled($container, $config['channels']['email'])) {
             $emailChannelDefinition = $container->setDefinition('oka_notifier_server.channel.email_handler'::class, new Definition(
@@ -94,7 +97,7 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
             $clickatellChannelDefinition->addTag('oka_notifier_server.channel_handler');
             $clickatellChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 5]);
         }
-        
+
         if (true === $this->isConfigEnabled($container, $config['channels']['wirepick'])) {
             $wirepickChannelDefinition = $container->setDefinition('oka_notifier_server.channel.wirepick_handler', new Definition(
                 WirepickChannelHandler::class,
@@ -159,8 +162,8 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
                         'options' => [
                             'queues' => [
                                 $config['messenger']['queue_name'] => [
-                                    'binding_keys' => $config['messenger']['binding_keys']
-                                ]
+                                    'binding_keys' => $config['messenger']['binding_keys'],
+                                ],
                             ],
                             'exchange' => [
                                 'type' => 'direct',
@@ -172,10 +175,10 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
                                 'multiplier' => 2,
                             ],
                         ],
-                    ]
+                    ],
                 ],
                 'routing' => [Notification::class => $config['messenger']['default_publish_routing_key']],
-            ]
+            ],
         ]);
     }
 }

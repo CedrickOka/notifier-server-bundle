@@ -1,0 +1,15 @@
+oka_notifier_server_messages_list:
+    methods: GET
+    path: /{version}/{protocol}/messages
+    controller: Oka\Notifier\ServerBundle\Controller\MessageController::list
+    defaults:
+      version: v1
+      protocol: rest
+
+oka_notifier_server_messages_read:
+    methods: GET
+    path: /{version}/{protocol}/messages/{id}
+    controller: Oka\Notifier\ServerBundle\Controller\MessageController::read
+    defaults:
+        version: v1
+        protocol: rest

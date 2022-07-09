@@ -2,9 +2,10 @@
 
 namespace Oka\Notifier\ServerBundle\DependencyInjection;
 
+use Oka\Notifier\ServerBundle\Model\MessageInterface;
 use Oka\Notifier\ServerBundle\Model\SendReportInterface;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
@@ -23,6 +24,44 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('channels')
                     ->addDefaultsIfNotSet()
                     ->children()
+
+                        ->arrayNode('local')
+                            ->addDefaultsIfNotSet()
+                            ->canBeEnabled()
+                            ->validate()
+                                ->ifTrue(function ($v) {
+                                    return $this->validateChannel($v, ['db_driver', 'class_name']);
+                                })
+                                ->thenInvalid($this->createInvalidChannelMessage('local', ['db_driver', 'class_name']))
+                            ->end()
+
+                            ->children()
+                                ->enumNode('db_driver')
+                                    ->cannotBeEmpty()
+                                    ->values(['mongodb', 'orm'])
+                                    ->defaultValue('mongodb')
+                                ->end()
+
+                                ->scalarNode('model_manager_name')
+                                    ->defaultNull()
+                                ->end()
+
+                                ->scalarNode('class_name')
+                                    ->defaultNull()
+                                    ->validate()
+                                        ->ifTrue(function ($class) {
+                                            return null !== $class && !(new \ReflectionClass($class))->implementsInterface(MessageInterface::class);
+                                        })
+                                        ->thenInvalid('The confguration value "oka_notifier_server.channels.local.class_name" is not valid because "%s" class given must implement "'.MessageInterface::class.'".')
+                                    ->end()
+                                ->end()
+
+                                ->scalarNode('pagination_manager_name')
+                                    ->defaultValue('message')
+                                ->end()
+                            ->end()
+                        ->end()
+
                         ->arrayNode('email')
                             ->addDefaultsIfNotSet()
                             ->canBeEnabled()
@@ -88,7 +127,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                             ->end()
-                            
+
                             ->arrayNode('wirepick')
                                 ->addDefaultsIfNotSet()
                                 ->canBeEnabled()
@@ -102,7 +141,7 @@ class Configuration implements ConfigurationInterface
                                     ->scalarNode('client_id')
                                         ->defaultNull()
                                     ->end()
-                                    
+
                                     ->scalarNode('password')
                                         ->defaultNull()
                                     ->end()
@@ -180,7 +219,7 @@ class Configuration implements ConfigurationInterface
                                 ->ifTrue(function ($class) {
                                     return null !== $class && !(new \ReflectionClass($class))->implementsInterface(SendReportInterface::class);
                                 })
-                                ->thenInvalid('The confguration value "oka_notifier_server.reporting.class_name" is not valid because "%s" class given must implement '.SendReportInterface::class.'.')
+                                ->thenInvalid('The confguration value "oka_notifier_server.reporting.class_name" is not valid because "%s" class given must implement "'.SendReportInterface::class.'".')
                             ->end()
                         ->end()
 

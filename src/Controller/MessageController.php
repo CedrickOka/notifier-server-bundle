@@ -3,7 +3,7 @@
 namespace Oka\Notifier\ServerBundle\Controller;
 
 use Oka\InputHandlerBundle\Annotation\AccessControl;
-use Oka\Notifier\ServerBundle\Service\SendReportManager;
+use Oka\Notifier\ServerBundle\Service\MessageManager;
 use Oka\PaginationBundle\Pagination\PaginationManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,23 +14,23 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
-class SendReportController
+class MessageController
 {
-    private $reportManager;
+    private $messageManager;
     private $paginationManager;
-    private $paginationManagerName;
     private $serializer;
+    private $paginationManagerName;
 
-    public function __construct(SendReportManager $reportManager, PaginationManager $paginationManager, SerializerInterface $serializer, string $paginationManagerName)
+    public function __construct(MessageManager $messageManager, PaginationManager $paginationManager, SerializerInterface $serializer, string $paginationManagerName)
     {
-        $this->reportManager = $reportManager;
+        $this->messageManager = $messageManager;
         $this->paginationManager = $paginationManager;
         $this->serializer = $serializer;
         $this->paginationManagerName = $paginationManagerName;
     }
 
     /**
-     * Retrieve send report list.
+     * Retrieve message list.
      *
      * @param string $version
      * @param string $protocol
@@ -54,7 +54,7 @@ class SendReportController
     }
 
     /**
-     * Read send report details.
+     * Read message details.
      *
      * @param string $version
      * @param string $protocol
@@ -62,10 +62,10 @@ class SendReportController
      */
     public function read(Request $request, $version, $protocol, string $id): JsonResponse
     {
-        if (!$report = $this->reportManager->find($id)) {
-            throw new NotFoundHttpException(sprintf('Send report with resource identifier "%s" is not found.', $id));
+        if (!$message = $this->messageManager->find($id)) {
+            throw new NotFoundHttpException(sprintf('Message with resource identifier "%s" is not found.', $id));
         }
 
-        return new JsonResponse($this->serializer->serialize($report, 'json', ['groups' => ['details']]), 200, [], true);
+        return new JsonResponse($this->serializer->serialize($message, 'json', ['groups' => ['details']]), 200, [], true);
     }
 }

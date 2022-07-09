@@ -14,6 +14,7 @@ class SendReport extends BaseSendReport
      * @ORM\Id()
      * @ORM\Column(type="int")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
      * @var string
      */
     protected $id;

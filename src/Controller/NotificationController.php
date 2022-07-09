@@ -26,7 +26,7 @@ class NotificationController
     }
 
     /**
-     * Create notification
+     * Create notification.
      *
      * @param string $version
      * @param string $protocol
@@ -55,7 +55,7 @@ class NotificationController
             if (true === is_array($object)) {
                 $constraints = new Assert\Collection([
                     'name' => new Assert\Optional(new Assert\NotBlank()),
-                    'value' => new Assert\Required(new Assert\NotBlank())
+                    'value' => new Assert\Required(new Assert\NotBlank()),
                 ]);
             } else {
                 $constraints = new Assert\NotBlank();
@@ -73,9 +73,9 @@ class NotificationController
                     'receiver' => new Assert\Required($addressConstriants),
                     'message' => new Assert\Required(new Assert\NotBlank()),
                     'title' => new Assert\Optional(new Assert\NotBlank()),
-                    'attributes' => new Assert\Optional(new Assert\Type(['type' => 'array']))
+                    'attributes' => new Assert\Optional(new Assert\Type(['type' => 'array'])),
             ])
-            )
+            ),
         ]);
     }
 }
