@@ -46,13 +46,13 @@ class EmailChannelHandler implements ChannelHandlerInterface
                     if (false === isset($value['path'])) {
                         $email->attachFromPath($value['path'], $value['name'] ?? null, $value['contentType'] ?? null);
                     } else {
-                        $email->attach($value['body'], $value['name'] ?? null, $value['contentType'] ?? null);
+                        $email->attach(base64_decode($value['body']), $value['name'] ?? null, $value['contentType'] ?? null);
                     }
                 } else {
                     if (false === isset($value['path'])) {
                         $email->embedFromPath($value['path'], $value['name'] ?? null, $value['contentType'] ?? null);
                     } else {
-                        $email->embed($value['body'], $value['name'] ?? null, $value['contentType'] ?? null);
+                        $email->embed(base64_decode($value['body']), $value['name'] ?? null, $value['contentType'] ?? null);
                     }
                 }
             }
