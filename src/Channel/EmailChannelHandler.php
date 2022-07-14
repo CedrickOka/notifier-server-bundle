@@ -38,14 +38,22 @@ class EmailChannelHandler implements ChannelHandlerInterface
 
         if (true === isset($attributes['attachments']) && true === is_array($attributes['attachments'])) {
             foreach ($attributes['attachments'] as $value) {
-                if (false === isset($value['path'])) {
+                if (false === isset($value['path']) && false === isset($value['body'])) {
                     continue;
                 }
 
-                if (false === $value['inline']) {
-                    $email->attachFromPath($value['path'], $value['name'] ?? null, $value['contentType'] ?? null);
+                if (false === $value['inline'] ?? false) {
+                    if (false === isset($value['path'])) {
+                        $email->attachFromPath($value['path'], $value['name'] ?? null, $value['contentType'] ?? null);
+                    } else {
+                        $email->attach($value['body'], $value['name'] ?? null, $value['contentType'] ?? null);
+                    }
                 } else {
-                    $email->embedFromPath($value['path'], $value['name'] ?? null, $value['contentType'] ?? null);
+                    if (false === isset($value['path'])) {
+                        $email->embedFromPath($value['path'], $value['name'] ?? null, $value['contentType'] ?? null);
+                    } else {
+                        $email->embed($value['body'], $value['name'] ?? null, $value['contentType'] ?? null);
+                    }
                 }
             }
         }

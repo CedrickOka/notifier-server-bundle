@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+#### 1.7.0 (2022-07-14)
+
+* Added support for attachments body.
+
+#### 1.6.0 (2022-07-09)
+
+* Added new local notification channel.
+* Improves dependency injection.
+
 #### 1.5.0 (2022-04-02)
 
 * Updated bundle directory structure.
