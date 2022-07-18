@@ -31,6 +31,8 @@ class LocalChannelHandlerTest extends KernelTestCase
 
     public function setUp(): void
     {
+        static::bootKernel();
+
         $this->handler = static::$container->get('oka_notifier_server.channel.local_handler');
     }
 
