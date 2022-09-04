@@ -31,6 +31,8 @@ class MessageControllerTest extends WebTestCase
         /** @var \Oka\Notifier\ServerBundle\Channel\LocalChannelHandler $handler */
         $handler = static::$container->get('oka_notifier_server.channel.local_handler');
         $handler->send(new Notification(['local'], Address::create('test'), Address::create('test'), 'Hello World!'));
+
+        static::ensureKernelShutdown();
     }
 
     public function setUp(): void

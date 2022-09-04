@@ -25,6 +25,8 @@ class SendReportControllerTest extends WebTestCase
             ->remove()
             ->getQuery()
             ->execute();
+
+        static::ensureKernelShutdown();
     }
 
     public function setUp(): void

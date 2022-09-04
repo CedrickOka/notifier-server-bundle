@@ -25,12 +25,12 @@ abstract class Message implements MessageInterface
     /**
      * @var string
      */
-    protected $subject;
+    protected $body;
 
     /**
      * @var string
      */
-    protected $body;
+    protected $subject;
 
     /**
      * @var \DateTime
@@ -66,18 +66,6 @@ abstract class Message implements MessageInterface
         return $this;
     }
 
-    public function getSubject(): ?string
-    {
-        return $this->subject;
-    }
-
-    public function setSubject(string $subject): self
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
-
     public function getBody(): string
     {
         return $this->body;
@@ -86,6 +74,18 @@ abstract class Message implements MessageInterface
     public function setBody(string $body): self
     {
         $this->body = $body;
+
+        return $this;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(string $subject): self
+    {
+        $this->subject = $subject;
 
         return $this;
     }

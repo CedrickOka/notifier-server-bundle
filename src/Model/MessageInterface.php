@@ -17,13 +17,13 @@ interface MessageInterface
 
     public function setTo(Address $channel): self;
 
-    public function getSubject(): ?string;
-
-    public function setSubject(string $subject): self;
-
     public function getBody(): string;
 
     public function setBody(string $body): self;
+
+    public function getSubject(): ?string;
+
+    public function setSubject(string $subject): self;
 
     public function getIssuedAt(): \DateTimeInterface;
 

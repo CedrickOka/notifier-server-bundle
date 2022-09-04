@@ -18,7 +18,7 @@
   
   <php>
     <env name="KERNEL_CLASS" value="Oka\Notifier\ServerBundle\Tests\AppKernel"/>
-    <env name="DATABASE_URL" value="mysql://root:root@127.0.0.1:3306/notifier?serverVersion=5.7"/>
+	<env name="DATABASE_URL" value="sqlite:///:memory:"/>
     <env name="MONGODB_URL" value="mongodb://root:root@localhost:27017"/>
     <env name="MONGODB_DB" value="notifier"/>
     <env name="SENDER_ADDRESS" value="test"/>
