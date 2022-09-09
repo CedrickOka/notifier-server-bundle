@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Oka\Notifier\ServerBundle\Model\Contact">
+		<field name="channel" column="channel" type="string" />
+        <field name="name" column="name" type="string" />
+        <field name="addresses" column="addresses" type="json" />
+
+        <indexes>
+            <index name="name_idx" columns="name"/>
+        </indexes>
+
+        <unique-constraints>
+            <unique-constraint name="channel_name_idx" columns="channel,name"/>
+        </unique-constraints>
+    </mapped-superclass>
+</doctrine-mapping>

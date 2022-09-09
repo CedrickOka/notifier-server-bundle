@@ -8,6 +8,7 @@ use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckFirebaseMessagin
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckGuzzleHttpEnabledPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckMailerEnabledPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckPaginationEnabledPass;
+use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\ContactPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\LocalChannelPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\LoggerPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\MessengerPass;
@@ -50,6 +51,7 @@ class OkaNotifierServerBundle extends Bundle
         $container->addCompilerPass(new CheckFirebaseMessagingEnabledPass());
         $container->addCompilerPass(new CheckPaginationEnabledPass());
         $container->addCompilerPass(new LocalChannelPass());
+        $container->addCompilerPass(new ContactPass());
         $container->addCompilerPass(new NotificationReportingPass());
         $container->addCompilerPass(new MessengerPass());
         $container->addCompilerPass(new LoggerPass());
@@ -61,11 +63,13 @@ class OkaNotifierServerBundle extends Bundle
 
         if (true === class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')) {
             $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mapping, ['oka_notifier_server.channel.local.model_manager_name'], 'oka_notifier_server.channel.local.backend_type_orm'));
+            $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mapping, ['oka_notifier_server.contact.model_manager_name'], 'oka_notifier_server.contact.backend_type_orm'));
             $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mapping, ['oka_notifier_server.reporting.model_manager_name'], 'oka_notifier_server.reporting.backend_type_orm'));
         }
 
         if (true === class_exists('Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass')) {
             $container->addCompilerPass(DoctrineMongoDBMappingsPass::createXmlMappingDriver($mapping, ['oka_notifier_server.channel.local.model_manager_name'], 'oka_notifier_server.channel.local.backend_type_mongodb'));
+            $container->addCompilerPass(DoctrineMongoDBMappingsPass::createXmlMappingDriver($mapping, ['oka_notifier_server.contact.model_manager_name'], 'oka_notifier_server.contact.backend_type_mongodb'));
             $container->addCompilerPass(DoctrineMongoDBMappingsPass::createXmlMappingDriver($mapping, ['oka_notifier_server.reporting.model_manager_name'], 'oka_notifier_server.reporting.backend_type_mongodb'));
         }
     }

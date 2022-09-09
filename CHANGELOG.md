@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+#### 1.8.0 (2022-09-09)
+
+* Added contact features.
+
 #### 1.7.0 (2022-07-14)
 
 * Added support for attachments body.

@@ -40,12 +40,7 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
         $loader->load('services.yaml');
 
         if (true === $this->isConfigEnabled($container, $config['channels']['local'])) {
-            $container->setParameter('oka_notifier_server.channel.local.db_driver', $config['channels']['local']['db_driver']);
-            $container->setParameter('oka_notifier_server.channel.local.backend_type_'.$config['channels']['local']['db_driver'], true);
-            $container->setParameter('oka_notifier_server.channel.local.model_manager_name', $config['channels']['local']['model_manager_name']);
-            $container->setParameter('oka_notifier_server.channel.local.class_name', $config['channels']['local']['class_name']);
-            $container->setParameter('oka_notifier_server.channel.local.pagination_manager_name', $config['channels']['local']['pagination_manager_name']);
-
+            $this->configureDbal($container, 'channel.local', $config['channels']['local']);
             $loader->load('message.yaml');
 
             $localChannelDefinition = $container->setDefinition('oka_notifier_server.channel.local_handler'::class, new Definition(
@@ -117,14 +112,15 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
 
         $container->setParameter('oka_notifier_server.messenger.bus_id', $config['messenger']['bus_id']);
 
+        // Contact notification configuration
+        if (true === $this->isConfigEnabled($container, $config['contact'])) {
+            $this->configureDbal($container, 'contact', $config['contact']);
+            $loader->load('contact.yaml');
+        }
+
         // Reporting notification configuration
         if (true === $this->isConfigEnabled($container, $config['reporting'])) {
-            $container->setParameter('oka_notifier_server.reporting.db_driver', $config['reporting']['db_driver']);
-            $container->setParameter('oka_notifier_server.reporting.backend_type_'.$config['reporting']['db_driver'], true);
-            $container->setParameter('oka_notifier_server.reporting.model_manager_name', $config['reporting']['model_manager_name']);
-            $container->setParameter('oka_notifier_server.reporting.class_name', $config['reporting']['class_name']);
-            $container->setParameter('oka_notifier_server.reporting.pagination_manager_name', $config['reporting']['pagination_manager_name']);
-
+            $this->configureDbal($container, 'reporting', $config['reporting']);
             $loader->load('reporting.yaml');
         }
 
@@ -180,5 +176,14 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
                 'routing' => [Notification::class => $config['messenger']['default_publish_routing_key']],
             ],
         ]);
+    }
+
+    private function configureDbal(ContainerBuilder $container, string $configName, array $config): void
+    {
+        $container->setParameter(sprintf('oka_notifier_server.%s.db_driver', $configName), $config['db_driver']);
+        $container->setParameter(sprintf('oka_notifier_server.%s.backend_type_%s', $configName, $config['db_driver']), true);
+        $container->setParameter(sprintf('oka_notifier_server.%s.model_manager_name', $configName), $config['model_manager_name']);
+        $container->setParameter(sprintf('oka_notifier_server.%s.class_name', $configName), $config['class_name']);
+        $container->setParameter(sprintf('oka_notifier_server.%s.pagination_manager_name', $configName), $config['pagination_manager_name']);
     }
 }

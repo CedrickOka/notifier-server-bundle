@@ -30,6 +30,7 @@ class NotificationController
      *
      * @param string $version
      * @param string $protocol
+     *
      * @AccessControl(version="v1", protocol="rest", formats="json")
      * @RequestContent(constraints="createConstraints")
      */
@@ -51,7 +52,7 @@ class NotificationController
 
     private static function createConstraints(): Assert\Collection
     {
-        $addressConstriants = new Assert\Callback(['callback' => function ($object, ExecutionContextInterface $context, $payload) {
+        $addressConstriants = new Assert\Callback(function ($object, ExecutionContextInterface $context, $payload) {
             if (true === is_array($object)) {
                 $constraints = new Assert\Collection([
                     'name' => new Assert\Optional(new Assert\NotBlank()),
@@ -63,7 +64,7 @@ class NotificationController
 
             $validator = $context->getValidator()->inContext($context);
             $validator->validate($object, $constraints);
-        }]);
+        });
 
         return new Assert\Collection([
             'notifications' => new Assert\All(
@@ -73,7 +74,7 @@ class NotificationController
                     'receiver' => new Assert\Required($addressConstriants),
                     'message' => new Assert\Required(new Assert\NotBlank()),
                     'title' => new Assert\Optional(new Assert\NotBlank()),
-                    'attributes' => new Assert\Optional(new Assert\Type(['type' => 'array'])),
+                    'attributes' => new Assert\Optional(new Assert\Type('array')),
             ])
             ),
         ]);

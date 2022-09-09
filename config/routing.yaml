@@ -1,8 +1,23 @@
 oka_notifier_server_notifications:
     resource: "@OkaNotifierServerBundle/config/routes/notification.yaml"
+    defaults:
+        version: v1
+        protocol: rest
+
+oka_notifier_server_contacts:
+    resource: "@OkaNotifierServerBundle/config/routes/contact.yaml"
+    defaults:
+        version: v1
+        protocol: rest
 
 oka_notifier_server_messages:
     resource: "@OkaNotifierServerBundle/config/routes/message.yaml"
+    defaults:
+        version: v1
+        protocol: rest
 
 oka_notifier_server_send_reports:
     resource: "@OkaNotifierServerBundle/config/routes/reporting.yaml"
+    defaults:
+        version: v1
+        protocol: rest

@@ -34,6 +34,7 @@ class MessageController
      *
      * @param string $version
      * @param string $protocol
+     *
      * @AccessControl(version="v1", protocol="rest", formats="json")
      */
     public function list(Request $request, $version, $protocol): JsonResponse
@@ -58,6 +59,7 @@ class MessageController
      *
      * @param string $version
      * @param string $protocol
+     *
      * @AccessControl(version="v1", protocol="rest", formats="json")
      */
     public function read(Request $request, $version, $protocol, string $id): JsonResponse

@@ -23,6 +23,25 @@ class Address extends BaseAddress
         return $this;
     }
 
+    public function equals(Address $object): bool
+    {
+        return $object->getName() === $this->name && $object->getValue() === $this->value;
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            'value' => $this->value,
+            'name' => $this->name,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->value = $data['value'];
+        $this->name = $data['name'];
+    }
+
     public static function fromArray(array $data): self
     {
         $self = new self($data['value'], $data['name'] ?? null);

@@ -2,7 +2,7 @@
 <serializer xmlns="http://symfony.com/schema/dic/serializer-mapping"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/serializer-mapping https://symfony.com/schema/dic/serializer-mapping/serializer-mapping-1.0.xsd">
-    
+
     <class name="Oka\Notifier\ServerBundle\Model\Message">
         <attribute name="id">
             <group>summary</group>
@@ -30,6 +30,27 @@
 
         <attribute name="issuedAt" serialized-name="issuedAt">
             <group>summary</group>
+            <group>details</group>
+        </attribute>
+    </class>
+
+    <class name="Oka\Notifier\ServerBundle\Model\Contact">
+        <attribute name="id">
+            <group>summary</group>
+            <group>details</group>
+        </attribute>
+
+        <attribute name="channel">
+            <group>summary</group>
+            <group>details</group>
+        </attribute>
+
+        <attribute name="name">
+            <group>summary</group>
+            <group>details</group>
+        </attribute>
+
+        <attribute name="addresses">
             <group>details</group>
         </attribute>
     </class>

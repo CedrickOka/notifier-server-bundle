@@ -42,6 +42,7 @@ class NotificationControllerTest extends WebTestCase
 
     /**
      * @covers
+     *
      * @depends testCanSendNotificatonOnSMSChannel
      */
     public function testCannotSendNotificatonWithAWrongReceiver()

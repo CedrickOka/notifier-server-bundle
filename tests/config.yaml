@@ -67,15 +67,22 @@ kreait_firebase:
         default:
             credentials: '%env(resolve:FIREBASE_CREDENTIALS)%'
 
+oka_input_handler:
+    error_handler:
+        default_request_format: 'json'
+        override_problem_normalizer: true
+
 oka_pagination:
     db_driver: mongodb
-    filters:
-        issuedAt:
-            cast_type: string
-    sort:
-        order:
-            issuedAt: desc
     pagination_managers:
+        contact:
+            db_driver: mongodb
+            class: Oka\Notifier\ServerBundle\Tests\Document\Contact
+            filters:
+                channel:
+                    cast_type: string
+                name:
+                    cast_type: string
         message:
             db_driver: mongodb
             class: Oka\Notifier\ServerBundle\Tests\Document\Message
@@ -86,18 +93,33 @@ oka_pagination:
                 to:
                     property_name: to.value
                     cast_type: string
+                issuedAt:
+                    cast_type: string
+            sort:
+                order:
+                    issuedAt: desc
         send_report:
             db_driver: mongodb
             class: Oka\Notifier\ServerBundle\Tests\Document\SendReport
             filters:
                 channel:
                     cast_type: string
+                issuedAt:
+                    cast_type: string
+            sort:
+                order:
+                    issuedAt: desc
         send_report_orm:
             db_driver: orm
             class: Oka\Notifier\ServerBundle\Tests\Entity\SendReport
             filters:
                 channel:
                     cast_type: string
+                issuedAt:
+                    cast_type: string
+            sort:
+                order:
+                    issuedAt: desc
 
 oka_notifier_server:
     channels:
@@ -119,5 +141,7 @@ oka_notifier_server:
             password: '%env(NOTIFIER_WIREPICK_PASSWORD)%'
         firebase:
             enabled: true
+    contact:
+        class_name: Oka\Notifier\ServerBundle\Tests\Document\Contact
     reporting:
         class_name: Oka\Notifier\ServerBundle\Tests\Document\SendReport

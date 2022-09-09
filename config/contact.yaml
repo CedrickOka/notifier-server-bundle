@@ -1,0 +1,13 @@
+services:
+    oka_notifier_server.contact_manager:
+        class: Oka\Notifier\ServerBundle\Service\ContactManager
+        arguments: ['', '%oka_notifier_server.contact.class_name%']
+
+    oka_notifier_server.contact_controller:
+        public: true
+        class: Oka\Notifier\ServerBundle\Controller\ContactController
+        arguments: ['@oka_notifier_server.contact_manager', '@oka_pagination.pagination_manager', '@serializer', '%oka_notifier_server.contact.pagination_manager_name%']
+
+    Oka\Notifier\ServerBundle\Controller\ContactController:
+        public: true
+        alias: 'oka_notifier_server.contact_controller'

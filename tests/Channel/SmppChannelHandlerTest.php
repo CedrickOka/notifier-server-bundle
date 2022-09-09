@@ -33,6 +33,7 @@ class SmppChannelHandlerTest extends KernelTestCase
 
     /**
      * @covers
+     *
      * @doesNotPerformAssertions
      */
     public function testThatHandlerCanWeSendNotification(): void

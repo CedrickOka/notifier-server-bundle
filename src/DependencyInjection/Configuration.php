@@ -2,8 +2,10 @@
 
 namespace Oka\Notifier\ServerBundle\DependencyInjection;
 
+use Oka\Notifier\ServerBundle\Model\ContactInterface;
 use Oka\Notifier\ServerBundle\Model\MessageInterface;
 use Oka\Notifier\ServerBundle\Model\SendReportInterface;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -193,41 +195,8 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
 
-                ->arrayNode('reporting')
-                    ->canBeEnabled()
-                    ->addDefaultsIfNotSet()
-                    ->validate()
-                        ->ifTrue(function ($class) {
-                            return true === $class['enabled'] && !$class['class_name'];
-                        })
-                        ->thenInvalid('The confguration value "oka_notifier_server.reporting.class_name" cannot be empty if reporting is enabled.')
-                    ->end()
-                    ->children()
-                        ->enumNode('db_driver')
-                            ->cannotBeEmpty()
-                            ->values(['mongodb', 'orm'])
-                            ->defaultValue('mongodb')
-                        ->end()
-
-                        ->scalarNode('model_manager_name')
-                            ->defaultNull()
-                        ->end()
-
-                        ->scalarNode('class_name')
-                            ->defaultNull()
-                            ->validate()
-                                ->ifTrue(function ($class) {
-                                    return null !== $class && !(new \ReflectionClass($class))->implementsInterface(SendReportInterface::class);
-                                })
-                                ->thenInvalid('The confguration value "oka_notifier_server.reporting.class_name" is not valid because "%s" class given must implement "'.SendReportInterface::class.'".')
-                            ->end()
-                        ->end()
-
-                        ->scalarNode('pagination_manager_name')
-                            ->defaultValue('send_report')
-                        ->end()
-                    ->end()
-                ->end()
+                ->append($this->dbalConfiguration('contact', ContactInterface::class))
+                ->append($this->dbalConfiguration('reporting', SendReportInterface::class, 'send_report'))
 
                 ->scalarNode('logger_id')
                     ->defaultNull()
@@ -235,6 +204,47 @@ class Configuration implements ConfigurationInterface
             ->end();
 
         return $treeBuilder;
+    }
+
+    protected function dbalConfiguration(string $name, string $interfaceName, string $paginationManagerame = null): ArrayNodeDefinition
+    {
+        $node = new ArrayNodeDefinition($name);
+        $node
+            ->canBeEnabled()
+            ->addDefaultsIfNotSet()
+            ->validate()
+                ->ifTrue(function ($class) {
+                    return true === $class['enabled'] && !$class['class_name'];
+                })
+                ->thenInvalid('The confguration value "oka_notifier_server.'.$name.'.class_name" cannot be empty if reporting is enabled.')
+            ->end()
+            ->children()
+                ->enumNode('db_driver')
+                    ->cannotBeEmpty()
+                    ->values(['mongodb', 'orm'])
+                    ->defaultValue('mongodb')
+                ->end()
+
+                ->scalarNode('model_manager_name')
+                    ->defaultNull()
+                ->end()
+
+                ->scalarNode('class_name')
+                    ->defaultNull()
+                    ->validate()
+                        ->ifTrue(function ($class) use ($interfaceName) {
+                            return null !== $class && !(new \ReflectionClass($class))->implementsInterface($interfaceName);
+                        })
+                        ->thenInvalid('The confguration value "oka_notifier_server.'.$name.'.class_name" is not valid because "%s" class given must implement "'.$interfaceName.'".')
+                    ->end()
+                ->end()
+
+                ->scalarNode('pagination_manager_name')
+                    ->defaultValue($paginationManagerame ?? $name)
+                ->end()
+            ->end();
+
+        return $node;
     }
 
     protected function validateChannel($value, array $options = []): bool
