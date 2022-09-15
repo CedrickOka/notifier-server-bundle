@@ -7,3 +7,8 @@ oka_notifier_server_messages_read:
     methods: GET
     path: /{version}/{protocol}/messages/{id}
     controller: Oka\Notifier\ServerBundle\Controller\MessageController::read
+
+oka_notifier_server_messages_delete:
+    methods: DELETE
+    path: /{version}/{protocol}/messages/{id}
+    controller: Oka\Notifier\ServerBundle\Controller\MessageController::delete

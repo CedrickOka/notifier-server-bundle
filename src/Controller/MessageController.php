@@ -70,4 +70,23 @@ class MessageController
 
         return new JsonResponse($this->serializer->serialize($message, 'json', ['groups' => ['details']]), 200, [], true);
     }
+
+    /**
+     * Delete message.
+     *
+     * @param string $version
+     * @param string $protocol
+     *
+     * @AccessControl(version="v1", protocol="rest", formats="json")
+     */
+    public function delete(Request $request, $version, $protocol, string $id): JsonResponse
+    {
+        if (!$message = $this->messageManager->find($id)) {
+            throw new NotFoundHttpException(sprintf('Message with resource identifier "%s" is not found.', $id));
+        }
+
+        $this->messageManager->remove($message);
+
+        return new JsonResponse(null, 204);
+    }
 }

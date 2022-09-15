@@ -20,6 +20,7 @@ abstract class AbstractObjectManager
     public function __construct(ObjectManager $objectManager, string $class)
     {
         $metadata = $objectManager->getClassMetadata($class);
+
         $this->objectManager = $objectManager;
         $this->class = $metadata->getName();
         $this->objectRepository = $objectManager->getRepository($this->class);

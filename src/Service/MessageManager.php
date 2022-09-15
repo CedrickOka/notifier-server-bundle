@@ -35,4 +35,10 @@ class MessageManager extends AbstractObjectManager
     {
         return $this->objectRepository->find($id);
     }
+
+    public function remove(MessageInterface $message): void
+    {
+        $this->objectManager->remove($message);
+        $this->objectManager->flush();
+    }
 }
