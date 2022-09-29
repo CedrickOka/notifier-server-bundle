@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+#### 1.10.0 (2022-09-29)
+
+* Added owner support in local channel.
+
 #### 1.8.0 (2022-09-09)
 
 * Added contact features.

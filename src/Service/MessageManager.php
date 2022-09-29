@@ -10,7 +10,7 @@ use Oka\Notifier\ServerBundle\Model\MessageInterface;
  */
 class MessageManager extends AbstractObjectManager
 {
-    public function create(Address $from, Address $to, string $body, string $subject = null): MessageInterface
+    public function create(Address $from, Address $to, string $body, string $subject = null, string $ownerId = null): MessageInterface
     {
         /** @var \Oka\Notifier\ServerBundle\Model\MessageInterface $message */
         $message = new $this->class();
@@ -20,6 +20,10 @@ class MessageManager extends AbstractObjectManager
 
         if (null !== $subject) {
             $message->setSubject($subject);
+        }
+
+        if (null !== $ownerId) {
+            $message->setOwnerId($ownerId);
         }
 
         if (false === $this->objectManager->contains($message)) {

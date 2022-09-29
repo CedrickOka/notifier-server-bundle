@@ -9,6 +9,7 @@
     	<embed-one field="to" target-document="Oka\Notifier\ServerBundle\Model\Address" />
         <field field-name="subject" name="subject" type="string" nullable="true" />
         <field field-name="body" name="body" type="string" />
+        <field field-name="ownerId" name="owner_id" type="string" nullable="true" />
         <field field-name="issuedAt" name="issued_at" type="date" />
 
         <indexes>
@@ -18,6 +19,10 @@
             </index>
             <index unique="false">
                 <key name="to.value" order="asc" />
+                <option name="background" value="true" />
+            </index>
+            <index unique="false">
+                <key name="owner_id" order="asc" />
                 <option name="background" value="true" />
             </index>
         </indexes>

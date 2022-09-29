@@ -52,6 +52,6 @@ class LocalChannelHandlerTest extends KernelTestCase
      */
     public function testThatHandlerCanWeSendNotification(): void
     {
-        $this->handler->send(new Notification(['local'], Address::create('0707'), Address::create(getenv('RECEIVER_ADDRESS')), 'Hello World!'));
+        $this->handler->send(new Notification(['local'], Address::create('0707'), Address::create(getenv('RECEIVER_ADDRESS')), 'Hello World!', null, ['ownerId' => 'johndoe']));
     }
 }

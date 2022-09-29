@@ -33,6 +33,11 @@ abstract class Message implements MessageInterface
     protected $subject;
 
     /**
+     * @var string
+     */
+    protected $ownerId;
+
+    /**
      * @var \DateTime
      */
     protected $issuedAt;
@@ -86,6 +91,18 @@ abstract class Message implements MessageInterface
     public function setSubject(string $subject): self
     {
         $this->subject = $subject;
+
+        return $this;
+    }
+
+    public function getOwnerId(): ?string
+    {
+        return $this->ownerId;
+    }
+
+    public function setOwnerId(string $ownerId): self
+    {
+        $this->ownerId = $ownerId;
 
         return $this;
     }

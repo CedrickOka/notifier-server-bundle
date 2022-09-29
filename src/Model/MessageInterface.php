@@ -25,6 +25,10 @@ interface MessageInterface
 
     public function setSubject(string $subject): self;
 
+    public function getOwnerId(): ?string;
+
+    public function setOwnerId(string $ownerId): self;
+
     public function getIssuedAt(): \DateTimeInterface;
 
     public function setIssuedAt(\DateTimeInterface $issuedAt): self;
