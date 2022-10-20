@@ -145,13 +145,6 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
 
         $container->prependExtensionConfig('framework', [
             'messenger' => [
-                'serializer' => [
-                    'default_serializer' => 'messenger.transport.symfony_serializer',
-                    'symfony_serializer' => [
-                        'format' => 'json',
-                        'context' => [],
-                    ],
-                ],
                 'transports' => [
                     'notification' => [
                         'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
@@ -164,11 +157,6 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
                             'exchange' => [
                                 'type' => 'direct',
                                 'default_publish_routing_key' => $config['messenger']['default_publish_routing_key'],
-                            ],
-                            'prefetch_count' => 1,
-                            'retry_strategy' => [
-                                'type' => 15000,
-                                'multiplier' => 2,
                             ],
                         ],
                     ],

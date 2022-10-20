@@ -178,7 +178,7 @@ class Configuration implements ConfigurationInterface
 
                         ->scalarNode('queue_name')
                             ->cannotBeEmpty()
-                            ->defaultValue('messages.notifier')
+                            ->defaultValue('messages.notifier.notification')
                         ->end()
 
                         ->arrayNode('binding_keys')
