@@ -37,7 +37,7 @@ class EmailChannelHandler implements ChannelHandlerInterface
         $attributes = $notification->getAttributes();
 
         if (true === isset($attributes['attachments']) && true === is_array($attributes['attachments'])) {
-            foreach ($attributes['attachments'] as $value) {
+            foreach ($attributes['attachments'] as $key => $value) {
                 if (false === isset($value['path']) && false === isset($value['body'])) {
                     continue;
                 }
@@ -49,7 +49,13 @@ class EmailChannelHandler implements ChannelHandlerInterface
                     $method = false === isset($value['path']) ? 'embed' : 'embedFromPath';
                     $email->$method($value['path'] ?? base64_decode($value['body']), $value['name'] ?? null, $value['contentType'] ?? null);
                 }
+
+                if (true === isset($value['body'])) {
+                    $attributes['attachments'][$key]['body'] = '[TRUNCATED]';
+                }
             }
+
+            $notification->setAttributes($attributes);
         }
 
         if (true === isset($attributes['headers']) && true === is_array($attributes['headers'])) {
