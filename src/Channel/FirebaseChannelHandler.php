@@ -28,7 +28,7 @@ class FirebaseChannelHandler implements ChannelHandlerInterface
         $receiver = $notification->getReceiver();
         $attributes = $notification->getAttributes();
 
-        $message = CloudMessage::withTarget('token', $receiver->getValue())
+        $message = CloudMessage::withTarget($receiver->getName() ?? 'token', $receiver->getValue())
         ->withNotification(\Kreait\Firebase\Messaging\Notification::create(
             $notification->getTitle(),
             $notification->getMessage(),
