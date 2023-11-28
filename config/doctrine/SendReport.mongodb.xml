@@ -6,7 +6,7 @@
                     
     <mapped-superclass name="Oka\Notifier\ServerBundle\Model\SendReport">
         <field field-name="channel" name="channel" type="string" />
-        <field field-name="paylaod" name="paylaod" type="hash" />
+        <field field-name="payload" name="payload" type="hash" also-load="paylaod" />
         <field field-name="issuedAt" name="issued_at" type="date" />
 
         <indexes>

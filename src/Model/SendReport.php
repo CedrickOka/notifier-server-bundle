@@ -20,7 +20,7 @@ abstract class SendReport implements SendReportInterface
     /**
      * @var array
      */
-    protected $paylaod;
+    protected $payload;
 
     /**
      * @var \DateTime
@@ -44,14 +44,14 @@ abstract class SendReport implements SendReportInterface
         return $this;
     }
 
-    public function getPaylaod(): array
+    public function getPayload(): array
     {
-        return $this->paylaod;
+        return $this->payload;
     }
 
-    public function setPaylaod(array $paylaod): self
+    public function setPayload(array $payload): self
     {
-        $this->paylaod = $paylaod;
+        $this->payload = $payload;
 
         return $this;
     }

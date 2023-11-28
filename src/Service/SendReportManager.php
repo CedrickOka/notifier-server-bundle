@@ -9,12 +9,12 @@ use Oka\Notifier\ServerBundle\Model\SendReportInterface;
  */
 class SendReportManager extends AbstractObjectManager
 {
-    public function create(string $channel, array $paylaod = [], \DateTimeInterface $issuedAt = null): SendReportInterface
+    public function create(string $channel, array $payload = [], \DateTimeInterface $issuedAt = null): SendReportInterface
     {
         /** @var \Oka\Notifier\ServerBundle\Model\SendReportInterface $report */
         $report = new $this->class();
         $report->setChannel($channel);
-        $report->setPaylaod($paylaod);
+        $report->setPayload($payload);
 
         if (null !== $issuedAt) {
             $report->setIssuedAt($issuedAt);

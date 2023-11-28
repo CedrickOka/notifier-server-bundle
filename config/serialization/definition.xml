@@ -77,7 +77,7 @@
             <group>details</group>
         </attribute>
 
-        <attribute name="paylaod">
+        <attribute name="payload">
             <group>summary</group>
             <group>details</group>
         </attribute>

@@ -13,9 +13,9 @@ interface SendReportInterface
 
     public function setChannel(string $channel): self;
 
-    public function getPaylaod(): array;
+    public function getPayload(): array;
 
-    public function setPaylaod(array $paylaod): self;
+    public function setPayload(array $payload): self;
 
     public function getIssuedAt(): \DateTimeInterface;
 
