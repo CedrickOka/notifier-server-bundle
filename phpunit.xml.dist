@@ -21,15 +21,6 @@
 	<env name="DATABASE_URL" value="sqlite:///:memory:"/>
     <env name="MONGODB_URL" value="mongodb://root:root@localhost:27017"/>
     <env name="MONGODB_DB" value="notifier"/>
-    <env name="SENDER_ADDRESS" value="test"/>
-    <env name="RECEIVER_ADDRESS" value="2250505050505"/>
-    <env name="NOTIFIER_SMPP_DSN" value="smpp://597019:LBIJVQ@smscsim.melroselabs.com:8775"/>
-    <env name="NOTIFIER_CLICKATELL_URL" value="https://api.clickatell.com"/>
-    <env name="NOTIFIER_CLICKATELL_API_TOKEN" value="s$cretf0rt3st"/>
-    <env name="NOTIFIER_INFOBIP_URL" value="https://api.infobip.com"/>
-    <env name="NOTIFIER_INFOBIP_API_KEY" value="s$cretf0rt3st"/>
-    <env name="NOTIFIER_WIREPICK_CLIENT_ID" value="username"/>
-    <env name="NOTIFIER_WIREPICK_PASSWORD" value="s$cretf0rt3st"/>
   </php>
   
   <testsuites>
