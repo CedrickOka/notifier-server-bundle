@@ -28,9 +28,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class OkaNotifierServerExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
@@ -78,7 +75,7 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
         if (true === $this->isConfigEnabled($container, $config['channels']['infobip'])) {
             $infobipChannelDefinition = $container->setDefinition('oka_notifier_server.channel.infobip_handler', new Definition(
                 InfobipChannelHandler::class,
-                [$config['channels']['infobip']['url'], $config['channels']['infobip']['api_key'], new Parameter('kernel.debug')]
+                [$config['channels']['infobip']['api_key'], new Parameter('kernel.debug')]
             ));
             $infobipChannelDefinition->addTag('oka_notifier_server.channel_handler');
             $infobipChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 10]);
@@ -87,7 +84,7 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
         if (true === $this->isConfigEnabled($container, $config['channels']['clickatell'])) {
             $clickatellChannelDefinition = $container->setDefinition('oka_notifier_server.channel.clickatell_handler', new Definition(
                 ClickatellChannelHandler::class,
-                [$config['channels']['clickatell']['url'], $config['channels']['clickatell']['token'], new Parameter('kernel.debug')]
+                [$config['channels']['clickatell']['token'], new Parameter('kernel.debug')]
             ));
             $clickatellChannelDefinition->addTag('oka_notifier_server.channel_handler');
             $clickatellChannelDefinition->addTag('oka_notifier_server.channel_handler_sms', ['priority' => 5]);
