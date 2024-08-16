@@ -19,7 +19,7 @@ class NotificationHandler implements MessageHandlerInterface
     private $logger;
     private $reportManager;
 
-    public function __construct(iterable $handlers, SendReportManager $reportManager = null, LoggerInterface $logger = null)
+    public function __construct(iterable $handlers, ?SendReportManager $reportManager = null, ?LoggerInterface $logger = null)
     {
         $this->handlers = $handlers;
         $this->reportManager = $reportManager;
@@ -50,6 +50,7 @@ class NotificationHandler implements MessageHandlerInterface
                 $noHandlerSelected = false;
             } catch (InvalidNotificationException $e) {
                 if (null !== $this->logger) {
+                    $e = $e->getPrevious() ?? $e;
                     $this->logger->error(
                         sprintf('%s: %s (uncaught exception) at %s line %s', get_class($e), $e->getMessage(), $e->getFile(), $e->getLine()),
                         $this->createLogContext($notification)
