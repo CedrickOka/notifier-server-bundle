@@ -14,14 +14,14 @@ use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
 class ClickatellChannelHandler implements SmsChannelHandlerInterface
 {
     /**
-     * @var \GuzzleHttp\Client
+     * @var Client
      */
     private $httpClient;
 
-    public function __construct(string $url, string $token, bool $debug)
+    public function __construct(string $token, bool $debug)
     {
         $this->httpClient = new Client([
-            'base_uri' => $url,
+            'base_uri' => 'https://api.clickatell.com',
             RequestOptions::DEBUG => $debug,
             RequestOptions::HEADERS => [
                 'X-Version' => '1',

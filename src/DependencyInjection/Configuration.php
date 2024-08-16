@@ -17,7 +17,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('oka_notifier_server');
-        /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
+        /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
@@ -95,14 +95,14 @@ class Configuration implements ConfigurationInterface
                             ->canBeEnabled()
                             ->validate()
                                 ->ifTrue(function ($v) {
-                                    return $this->validateChannel($v, ['url', 'api_key']);
+                                    return $this->validateChannel($v, ['api_key']);
                                 })
-                                ->thenInvalid($this->createInvalidChannelMessage('infobip', ['url', 'api_key']))
+                                ->thenInvalid($this->createInvalidChannelMessage('infobip', ['api_key']))
                             ->end()
                             ->children()
-                                ->scalarNode('url')
-                                    ->defaultNull()
-                                ->end()
+//                                 ->scalarNode('url')
+//                                     ->defaultNull()
+//                                 ->end()
 
                                 ->scalarNode('api_key')
                                     ->defaultNull()
@@ -115,14 +115,14 @@ class Configuration implements ConfigurationInterface
                             ->canBeEnabled()
                             ->validate()
                                 ->ifTrue(function ($v) {
-                                    return $this->validateChannel($v, ['url', 'token']);
+                                    return $this->validateChannel($v, ['token']);
                                 })
-                                ->thenInvalid($this->createInvalidChannelMessage('clickatell', ['url', 'token']))
+                                ->thenInvalid($this->createInvalidChannelMessage('clickatell', ['token']))
                             ->end()
                             ->children()
-                                ->scalarNode('url')
-                                    ->defaultNull()
-                                ->end()
+//                                 ->scalarNode('url')
+//                                     ->defaultNull()
+//                                 ->end()
 
                                 ->scalarNode('token')
                                     ->defaultNull()
@@ -206,7 +206,7 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    protected function dbalConfiguration(string $name, string $interfaceName, string $paginationManagerame = null): ArrayNodeDefinition
+    protected function dbalConfiguration(string $name, string $interfaceName, ?string $paginationManagerame = null): ArrayNodeDefinition
     {
         $node = new ArrayNodeDefinition($name);
         $node

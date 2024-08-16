@@ -18,10 +18,10 @@ class InfobipChannelHandler implements SmsChannelHandlerInterface
      */
     private $httpClient;
 
-    public function __construct(string $url, string $apiKey, bool $debug)
+    public function __construct(string $apiKey, bool $debug)
     {
         $this->httpClient = new Client([
-            'base_uri' => $url,
+            'base_uri' => 'https://api.infobip.com',
             RequestOptions::DEBUG => $debug,
             RequestOptions::HEADERS => [
                 'Accept' => 'application/json',
