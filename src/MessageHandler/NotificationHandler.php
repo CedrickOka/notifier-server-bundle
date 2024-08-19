@@ -7,7 +7,6 @@ use Oka\Notifier\ServerBundle\Channel\SmsChannelHandler;
 use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
 use Oka\Notifier\ServerBundle\Service\SendReportManager;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
@@ -73,8 +72,8 @@ class NotificationHandler implements MessageHandlerInterface
             $notification->removeChannel($handler->getName());
         }
 
-        if (true === $noHandlerSelected) {
-            throw new UnrecoverableMessageHandlingException('No handler was able to send this notification.');
+        if (true === $noHandlerSelected && null !== $this->logger) {
+            $this->logger->warning('No handler was able to send this notification.', $this->createLogContext($notification));
         }
     }
 
@@ -82,9 +81,9 @@ class NotificationHandler implements MessageHandlerInterface
     {
         return [
             'channels' => $notification->getChannels(),
+            'attributes' => $notification->getAttributes(),
             'sender' => (string) $notification->getSender(),
             'receiver' => (string) $notification->getReceiver(),
-            'message' => $notification->getMessage(),
         ];
     }
 }
