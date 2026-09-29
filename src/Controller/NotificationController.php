@@ -8,8 +8,8 @@ use Oka\Notifier\Message\Address;
 use Oka\Notifier\Message\Notification;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Transport\AmqpExt\AmqpStamp;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -18,11 +18,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class NotificationController
 {
-    private $bus;
-
-    public function __construct(MessageBusInterface $bus)
+    public function __construct(private MessageBusInterface $bus)
     {
-        $this->bus = $bus;
     }
 
     /**
@@ -30,10 +27,9 @@ class NotificationController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
-     * @RequestContent(constraints="createConstraints")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
+    #[RequestContent(constraints: 'createConstraints')]
     public function create(Request $request, $version, $protocol, array $requestContent): JsonResponse
     {
         foreach ($requestContent['notifications'] as $notification) {
@@ -52,9 +48,9 @@ class NotificationController
 
     private static function createConstraints(): Assert\Collection
     {
-        $addressConstriants = new Assert\Callback(function ($object, ExecutionContextInterface $context, $payload) {
+        $addressConstraints = new Assert\Callback(function ($object, ExecutionContextInterface $context, $payload) {
             if (true === is_array($object)) {
-                $constraints = new Assert\Collection([
+                $constraints = new Assert\Collection(fields: [
                     'name' => new Assert\Optional(new Assert\NotBlank()),
                     'value' => new Assert\Required(new Assert\NotBlank()),
                 ]);
@@ -66,16 +62,16 @@ class NotificationController
             $validator->validate($object, $constraints);
         });
 
-        return new Assert\Collection([
+        return new Assert\Collection(fields: [
             'notifications' => new Assert\All(
-                new Assert\Collection([
+                new Assert\Collection(fields: [
                     'channels' => new Assert\Required(new Assert\All(new Assert\NotBlank())),
-                    'sender' => new Assert\Required($addressConstriants),
-                    'receiver' => new Assert\Required($addressConstriants),
+                    'sender' => new Assert\Required($addressConstraints),
+                    'receiver' => new Assert\Required($addressConstraints),
                     'message' => new Assert\Required(new Assert\NotBlank()),
                     'title' => new Assert\Optional(new Assert\NotBlank()),
                     'attributes' => new Assert\Optional(new Assert\Type('array')),
-            ])
+                ])
             ),
         ]);
     }

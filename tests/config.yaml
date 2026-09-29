@@ -3,7 +3,8 @@ framework:
     secret: 'secret'
     default_locale: 'fr'
     session:
-        storage_id: session.storage.mock_file
+        storage_factory_id: session.storage.factory.mock_file
+        handler_id: null
     php_errors:
         log: true
 
@@ -25,6 +26,9 @@ framework:
         resource: '%kernel.project_dir%/tests/routes.yaml'
         utf8: true
 
+    http_client:
+        mock_response_factory: Oka\Notifier\ServerBundle\Tests\MockHttpClientCallback
+
 doctrine:
     dbal:
         connections:
@@ -38,7 +42,7 @@ doctrine:
         mappings:
             App:
                 is_bundle: false
-                type: annotation
+                type: attribute
                 dir: '%kernel.project_dir%/tests/Entity'
                 prefix: 'Oka\Notifier\ServerBundle\Tests\Entity'
                 alias: App
@@ -57,7 +61,7 @@ doctrine_mongodb:
             mappings:
                 App:
                     is_bundle: false
-                    type: annotation
+                    type: attribute
                     dir: '%kernel.project_dir%/tests/Document'
                     prefix: 'Oka\Notifier\ServerBundle\Tests\Document'
                     alias: App
@@ -143,3 +147,11 @@ oka_notifier_server:
         class_name: Oka\Notifier\ServerBundle\Tests\Document\Contact
     reporting:
         class_name: Oka\Notifier\ServerBundle\Tests\Document\SendReport
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Oka\Notifier\ServerBundle\Tests\MockHttpClientCallback:
+        public: true

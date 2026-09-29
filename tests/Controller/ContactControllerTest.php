@@ -20,7 +20,7 @@ class ContactControllerTest extends WebTestCase
         static::bootKernel();
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = static::$container->get('doctrine_mongodb.odm.document_manager');
+        $dm = static::getContainer()->get('doctrine_mongodb.odm.document_manager');
         $dm->createQueryBuilder(Contact::class)
             ->remove()
             ->getQuery()

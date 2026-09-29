@@ -2,27 +2,25 @@
 
 namespace Oka\Notifier\ServerBundle\MessageHandler;
 
+use Oka\Notifier\Message\Address;
 use Oka\Notifier\Message\Notification;
 use Oka\Notifier\ServerBundle\Channel\SmsChannelHandler;
 use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
+use Oka\Notifier\ServerBundle\Service\ContactManager;
 use Oka\Notifier\ServerBundle\Service\SendReportManager;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
-class NotificationHandler implements MessageHandlerInterface
+class NotificationHandler
 {
-    private $handlers;
-    private $logger;
-    private $reportManager;
-
-    public function __construct(iterable $handlers, ?SendReportManager $reportManager = null, ?LoggerInterface $logger = null)
-    {
-        $this->handlers = $handlers;
-        $this->reportManager = $reportManager;
-        $this->logger = $logger;
+    public function __construct(
+        private iterable $handlers,
+        private ?ContactManager $contactManager = null,
+        private ?SendReportManager $reportManager = null,
+        private ?LoggerInterface $logger = null,
+    ) {
     }
 
     public function __invoke(Notification $notification): void
@@ -33,6 +31,10 @@ class NotificationHandler implements MessageHandlerInterface
         foreach ($this->handlers as $handler) {
             if (false === $handler->supports($notification)) {
                 continue;
+            }
+
+            if (null !== $this->contactManager && Address::TYPE_CONTACT === $notification->getReceiver()->getType()) {
+                $contacts = $this->contactManager->findBy(['channel' => $notification->getReceiver()->getName(), 'name' => $notification->getReceiver()->getValue()]);
             }
 
             try {
@@ -59,7 +61,7 @@ class NotificationHandler implements MessageHandlerInterface
                 $sended = false;
             }
 
-            if (true === $sended && null !== $this->reportManager) {
+            if (null !== $this->reportManager && true === $sended) {
                 $payload = $notification->toArray();
                 unset($payload['channels'], $payload['message']);
 

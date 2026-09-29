@@ -22,7 +22,7 @@ class LocalChannelHandlerTest extends KernelTestCase
         static::bootKernel();
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = static::$container->get('doctrine_mongodb.odm.document_manager');
+        $dm = static::getContainer()->get('doctrine_mongodb.odm.document_manager');
         $dm->createQueryBuilder(Message::class)
             ->remove()
             ->getQuery()
@@ -33,13 +33,13 @@ class LocalChannelHandlerTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->handler = static::$container->get('oka_notifier_server.channel.local_handler');
+        $this->handler = static::getContainer()->get('oka_notifier_server.channel.local_handler');
     }
 
     /**
      * @covers
      */
-    public function testThatHandlerSupportsChannel()
+    public function testThatHandlerSupportsChannel(): void
     {
         $this->assertEquals(true, $this->handler->supports(new Notification(['local'], Address::create('test'), Address::create('test'), 'Hello World!')));
         $this->assertEquals(false, $this->handler->supports(new Notification(['clickatell'], Address::create('test'), Address::create('test'), 'Hello World!')));

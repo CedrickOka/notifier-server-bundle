@@ -16,10 +16,7 @@ use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
  */
 class SmppChannelHandler implements SmsChannelHandlerInterface
 {
-    /**
-     * @var array
-     */
-    private $configuration;
+    private array $configuration = [];
 
     public function __construct(string $dsn, bool $debug)
     {

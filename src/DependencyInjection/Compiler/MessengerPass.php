@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class MessengerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (false === $container->hasDefinition('oka_notifier_server.notification_controller')) {
             return;

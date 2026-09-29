@@ -9,6 +9,13 @@ use Oka\Notifier\Message\Address as BaseAddress;
  */
 class Address extends BaseAddress
 {
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
     public function setValue(string $value): self
     {
         $this->value = $value;
@@ -33,6 +40,7 @@ class Address extends BaseAddress
         return [
             'value' => $this->value,
             'name' => $this->name,
+            'type' => $this->type,
         ];
     }
 
@@ -40,11 +48,12 @@ class Address extends BaseAddress
     {
         $this->value = $data['value'];
         $this->name = $data['name'];
+        $this->type = $data['type'];
     }
 
     public static function fromArray(array $data): self
     {
-        $self = new self($data['value'], $data['name'] ?? null);
+        $self = new self($data['value'], $data['name'] ?? null, $data['type'] ?? null);
 
         return $self;
     }

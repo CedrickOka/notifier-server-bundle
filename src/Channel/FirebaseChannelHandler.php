@@ -10,11 +10,8 @@ use Oka\Notifier\Message\Notification;
  */
 class FirebaseChannelHandler implements ChannelHandlerInterface
 {
-    private $messaging;
-
-    public function __construct(Messaging $messaging)
+    public function __construct(private Messaging $messaging)
     {
-        $this->messaging = $messaging;
     }
 
     public function supports(Notification $notification): bool

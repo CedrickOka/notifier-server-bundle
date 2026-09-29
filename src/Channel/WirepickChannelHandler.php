@@ -2,32 +2,24 @@
 
 namespace Oka\Notifier\ServerBundle\Channel;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\RequestOptions;
 use Oka\Notifier\Message\Notification;
 use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
 class WirepickChannelHandler implements SmsChannelHandlerInterface
 {
-    private $username;
-    private $password;
-
-    /**
-     * @var \GuzzleHttp\ClientInterface
-     */
-    private $httpClient;
-
-    public function __construct(string $username, string $password, bool $debug)
+    public function __construct(private HttpClientInterface $httpClient, string $username, string $password, bool $debug)
     {
-        $this->username = $username;
-        $this->password = $password;
-        $this->httpClient = new Client([
+        $this->httpClient = $httpClient->withOptions([
             'base_uri' => 'https://api.wirepick.com',
-            RequestOptions::DEBUG => $debug,
+            'query' => [
+                'client' => $username,
+                'password' => $password,
+            ],
         ]);
     }
 
@@ -38,18 +30,21 @@ class WirepickChannelHandler implements SmsChannelHandlerInterface
 
     public function send(Notification $notification): void
     {
-        try {
-            /** @var \Psr\Http\Message\ResponseInterface $response */
-            $response = $this->httpClient->post('/httpsms/send', [
-                RequestOptions::QUERY => [
-                    'client' => $this->username,
-                    'password' => $this->password,
+        $response = $this->httpClient->request(
+            'POST',
+            '/httpsms/send',
+            [
+                'query' => [
                     'from' => $notification->getSender()->getValue(),
                     'phone' => $notification->getReceiver()->getValue(),
                     'text' => $notification->getMessage(),
                 ],
-            ]);
-        } catch (ClientException $e) {
+            ]
+        );
+
+        try {
+            $response->getContent();
+        } catch (ExceptionInterface $e) {
             throw new InvalidNotificationException(null, null, $e);
         }
     }
