@@ -24,8 +24,8 @@ class NotificationControllerTest extends WebTestCase
         $service->method('dispatch')->willReturn(new \Symfony\Component\Messenger\Envelope($message));
 
         $this->client = static::createClient();
-        static::$container->set('message_bus', $service);
-        static::$container->set('messenger.default_bus', $service);
+        static::getContainer()->set('message_bus', $service);
+        static::getContainer()->set('messenger.default_bus', $service);
     }
 
     /**

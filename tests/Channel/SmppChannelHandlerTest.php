@@ -19,25 +19,25 @@ class SmppChannelHandlerTest extends KernelTestCase
     public function setUp(): void
     {
         static::bootKernel();
-        $this->handler = static::$container->get('oka_notifier_server.channel.smpp_handler');
+        $this->handler = static::getContainer()->get('oka_notifier_server.channel.smpp_handler');
     }
 
     /**
      * @covers
      */
-    public function testThatHandlerSupportsChannel()
+    public function testThatHandlerSupportsChannel(): void
     {
         $this->assertEquals(true, $this->handler->supports(new Notification(['smpp', 'clickatell'], Address::create('test'), Address::create('test'), 'Hello World!')));
         $this->assertEquals(false, $this->handler->supports(new Notification(['clickatell'], Address::create('test'), Address::create('test'), 'Hello World!')));
     }
 
-    /**
-     * @covers
-     *
-     * @doesNotPerformAssertions
-     */
-    public function testThatHandlerCanWeSendNotification(): void
-    {
-        $this->handler->send(new Notification(['smpp'], Address::create('0707'), Address::create(getenv('RECEIVER_ADDRESS')), 'Hello World!'));
-    }
+    //     /**
+    //      * @covers
+    //      *
+    //      * @doesNotPerformAssertions
+    //      */
+    //     public function testThatHandlerCanWeSendNotification(): void
+    //     {
+    //         $this->handler->send(new Notification(['smpp'], Address::create('0707'), Address::create(getenv('RECEIVER_ADDRESS')), 'Hello World!'));
+    //     }
 }

@@ -27,5 +27,6 @@ local.properties
 
 ### Eclipse Patch ###
 
-# Eclipse Core		
+# Eclipse Core ###
 .project
+/vendor/

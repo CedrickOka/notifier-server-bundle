@@ -40,7 +40,7 @@ class OkaNotifierServerBundle extends Bundle
         return \dirname(__DIR__);
     }
 
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 
@@ -57,7 +57,7 @@ class OkaNotifierServerBundle extends Bundle
         $container->addCompilerPass(new LoggerPass());
     }
 
-    private function addRegisterMappingsPass(ContainerBuilder $container)
+    private function addRegisterMappingsPass(ContainerBuilder $container): void
     {
         $mapping = [realpath(__DIR__.'/../config/doctrine') => 'Oka\Notifier\ServerBundle\Model'];
 

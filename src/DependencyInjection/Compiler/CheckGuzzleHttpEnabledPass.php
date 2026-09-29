@@ -10,11 +10,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class CheckGuzzleHttpEnabledPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
-        if ((true === $container->hasDefinition('oka_notifier_server.channel.firebase_handler') ||
-            true === $container->hasDefinition('oka_notifier_server.channel.clickatell_handler')) &&
-            false === class_exists('GuzzleHttp\Client')) {
+        if ((true === $container->hasDefinition('oka_notifier_server.channel.firebase_handler')
+            || true === $container->hasDefinition('oka_notifier_server.channel.clickatell_handler'))
+            && false === class_exists('GuzzleHttp\Client')) {
             throw new \LogicException('To enable infobip or clickatell channel handler you have to install the "guzzlehttp/guzzle".');
         }
     }

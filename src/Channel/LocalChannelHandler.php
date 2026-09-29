@@ -11,11 +11,8 @@ use Oka\Notifier\ServerBundle\Service\MessageManager;
  */
 class LocalChannelHandler implements ChannelHandlerInterface
 {
-    private $messageManager;
-
-    public function __construct(MessageManager $messageManager)
+    public function __construct(private MessageManager $messageManager)
     {
-        $this->messageManager = $messageManager;
     }
 
     public function supports(Notification $notification): bool

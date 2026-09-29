@@ -3,7 +3,6 @@
 namespace Oka\Notifier\ServerBundle\Channel;
 
 use Kreait\Firebase\Messaging;
-use Kreait\Firebase\Messaging\CloudMessage;
 use Oka\Notifier\Message\Notification;
 
 /**
@@ -11,11 +10,8 @@ use Oka\Notifier\Message\Notification;
  */
 class FirebaseChannelHandler implements ChannelHandlerInterface
 {
-    private $messaging;
-
-    public function __construct(Messaging $messaging)
+    public function __construct(private Messaging $messaging)
     {
-        $this->messaging = $messaging;
     }
 
     public function supports(Notification $notification): bool
@@ -27,17 +23,27 @@ class FirebaseChannelHandler implements ChannelHandlerInterface
     {
         $receiver = $notification->getReceiver();
         $attributes = $notification->getAttributes();
-        $message = CloudMessage::withTarget($receiver->getName() ?? 'token', $receiver->getValue())
-            ->withNotification(Messaging\Notification::create(
-                $notification->getTitle(),
-                $notification->getMessage(),
-                $attributes['imageUrl'] ?? null
-            ));
+        $message = Messaging\CloudMessage::new()
+            ->withNotification(Messaging\Notification::create($notification->getTitle(), $notification->getMessage(), $attributes['imageUrl'] ?? null));
 
         unset($attributes['imageUrl']);
 
         if (!empty($attributes)) {
-            $message = $message->withData($attributes);
+            $message->withData($attributes);
+        }
+
+        switch ($receiver->getName()) {
+            case 'topic':
+                $message->toTopic($receiver->getValue());
+                break;
+
+            case 'condition':
+                $message->toCondition($receiver->getValue());
+                break;
+
+            default:
+                $message->toToken($receiver->getValue());
+                break;
         }
 
         $this->messaging->send($message);

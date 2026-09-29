@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class IntegrationTest extends KernelTestCase
 {
     /**
-     * @var \Oka\Notifier\ServerBundle\MessageHandler\NotificationHandler
+     * @var NotificationHandler
      */
     private $handler;
 
@@ -34,16 +34,16 @@ class IntegrationTest extends KernelTestCase
         static::bootKernel();
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = static::$container->get('doctrine_mongodb.odm.document_manager');
+        $dm = static::getContainer()->get('doctrine_mongodb.odm.document_manager');
         $dm->createQueryBuilder(Message::class)->remove()->getQuery()->execute();
         $dm->createQueryBuilder(SendReport::class)->remove()->getQuery()->execute();
     }
 
     public function setUp(): void
     {
-        $this->messageManager = static::$container->get('oka_notifier_server.message_manager');
-        $this->sendReportManager = static::$container->get('oka_notifier_server.send_report_manager');
-        $this->handler = new NotificationHandler([static::$container->get('oka_notifier_server.channel.local_handler')], $this->sendReportManager);
+        $this->messageManager = static::getContainer()->get('oka_notifier_server.message_manager');
+        $this->sendReportManager = static::getContainer()->get('oka_notifier_server.send_report_manager');
+        $this->handler = new NotificationHandler([static::getContainer()->get('oka_notifier_server.channel.local_handler')], null, $this->sendReportManager);
     }
 
     /**

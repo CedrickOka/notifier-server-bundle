@@ -16,17 +16,12 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class MessageController
 {
-    private $messageManager;
-    private $paginationManager;
-    private $serializer;
-    private $paginationManagerName;
-
-    public function __construct(MessageManager $messageManager, PaginationManager $paginationManager, SerializerInterface $serializer, string $paginationManagerName)
-    {
-        $this->messageManager = $messageManager;
-        $this->paginationManager = $paginationManager;
-        $this->serializer = $serializer;
-        $this->paginationManagerName = $paginationManagerName;
+    public function __construct(
+        private MessageManager $messageManager,
+        private PaginationManager $paginationManager,
+        private SerializerInterface $serializer,
+        private string $paginationManagerName,
+    ) {
     }
 
     /**
@@ -34,9 +29,8 @@ class MessageController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function list(Request $request, $version, $protocol): JsonResponse
     {
         try {
@@ -59,9 +53,8 @@ class MessageController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function read(Request $request, $version, $protocol, string $id): JsonResponse
     {
         if (!$message = $this->messageManager->find($id)) {
@@ -76,9 +69,8 @@ class MessageController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function delete(Request $request, $version, $protocol, string $id): JsonResponse
     {
         if (!$message = $this->messageManager->find($id)) {

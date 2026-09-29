@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class CheckMailerEnabledPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (true === $container->hasDefinition('oka_notifier_server.channel.email_handler') && false === $container->has('mailer')) {
             throw new \LogicException('To enable mail channel handler you have to install the "symfony/mailer".');

@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" 
-	bootstrap="vendor/autoload.php" 
-	executionOrder="depends,defects" 
-	forceCoversAnnotation="true" 
-	beStrictAboutCoversAnnotation="true" 
-	beStrictAboutOutputDuringTests="true" 
-	beStrictAboutTodoAnnotatedTests="true" 
-	colors="true" 
-	verbose="true">
-	
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" 
+    bootstrap="vendor/autoload.php" 
+    executionOrder="depends,defects" 
+    forceCoversAnnotation="true" 
+    beStrictAboutCoversAnnotation="true" 
+    beStrictAboutOutputDuringTests="true" 
+    beStrictAboutTodoAnnotatedTests="true" 
+    colors="true" 
+    verbose="true">
+
   <coverage processUncoveredFiles="true">
     <include>
       <directory suffix=".php">src</directory>
     </include>
   </coverage>
-  
+
   <php>
     <env name="KERNEL_CLASS" value="Oka\Notifier\ServerBundle\Tests\AppKernel"/>
-	<env name="DATABASE_URL" value="sqlite:///:memory:"/>
+    <env name="DATABASE_URL" value="sqlite:///:memory:"/>
     <env name="MONGODB_URL" value="mongodb://root:root@localhost:27017"/>
-    <env name="MONGODB_DB" value="notifier"/>
+    <env name="MONGODB_DB" value="db_name"/>
+    <env name="SENDER_ADDRESS" value="test"/>
+    <env name="RECEIVER_ADDRESS" value="test"/>
+    <env name="NOTIFIER_SMPP_DSN" value="smpp://username:password@hostname:port"/>
+    <env name="NOTIFIER_CLICKATELL_API_TOKEN" value="test"/>
+    <env name="NOTIFIER_WIREPICK_CLIENT_ID" value="test"/>
+    <env name="NOTIFIER_WIREPICK_PASSWORD" value="test"/>
+    <env name="NOTIFIER_INFOBIP_API_KEY" value="test"/>
   </php>
-  
+
   <testsuites>
     <testsuite name="default">
       <directory suffix="Test.php">tests</directory>

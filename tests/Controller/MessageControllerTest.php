@@ -22,14 +22,14 @@ class MessageControllerTest extends WebTestCase
         static::bootKernel();
 
         /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = static::$container->get('doctrine_mongodb.odm.document_manager');
+        $dm = static::getContainer()->get('doctrine_mongodb.odm.document_manager');
         $dm->createQueryBuilder(Message::class)
             ->remove()
             ->getQuery()
             ->execute();
 
         /** @var \Oka\Notifier\ServerBundle\Channel\LocalChannelHandler $handler */
-        $handler = static::$container->get('oka_notifier_server.channel.local_handler');
+        $handler = static::getContainer()->get('oka_notifier_server.channel.local_handler');
         $handler->send(new Notification(['local'], Address::create('test'), Address::create('test'), 'Hello World!'));
 
         static::ensureKernelShutdown();

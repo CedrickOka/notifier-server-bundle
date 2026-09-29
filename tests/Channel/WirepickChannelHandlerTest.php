@@ -19,13 +19,13 @@ class WirepickChannelHandlerTest extends KernelTestCase
     public function setUp(): void
     {
         static::bootKernel();
-        $this->handler = static::$container->get('oka_notifier_server.channel.wirepick_handler');
+        $this->handler = static::getContainer()->get('oka_notifier_server.channel.wirepick_handler');
     }
 
     /**
      * @covers
      */
-    public function testThatHandlerSupportsChannel()
+    public function testThatHandlerSupportsChannel(): void
     {
         $this->assertEquals(true, $this->handler->supports(new Notification(['sms', 'wirepick'], Address::create('test'), Address::create('test'), 'Hello World!')));
         $this->assertEquals(false, $this->handler->supports(new Notification(['sms'], Address::create('test'), Address::create('test'), 'Hello World!')));

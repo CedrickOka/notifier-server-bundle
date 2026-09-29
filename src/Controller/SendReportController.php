@@ -16,17 +16,12 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class SendReportController
 {
-    private $reportManager;
-    private $paginationManager;
-    private $paginationManagerName;
-    private $serializer;
-
-    public function __construct(SendReportManager $reportManager, PaginationManager $paginationManager, SerializerInterface $serializer, string $paginationManagerName)
-    {
-        $this->reportManager = $reportManager;
-        $this->paginationManager = $paginationManager;
-        $this->serializer = $serializer;
-        $this->paginationManagerName = $paginationManagerName;
+    public function __construct(
+        private SendReportManager $reportManager,
+        private PaginationManager $paginationManager,
+        private SerializerInterface $serializer,
+        private string $paginationManagerName,
+    ) {
     }
 
     /**
@@ -34,9 +29,8 @@ class SendReportController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function list(Request $request, $version, $protocol): JsonResponse
     {
         try {
@@ -59,9 +53,8 @@ class SendReportController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function read(Request $request, $version, $protocol, string $id): JsonResponse
     {
         if (!$report = $this->reportManager->find($id)) {

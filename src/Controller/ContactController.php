@@ -19,17 +19,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ContactController
 {
-    private $contactManager;
-    private $paginationManager;
-    private $serializer;
-    private $paginationManagerName;
-
-    public function __construct(ContactManager $contactManager, PaginationManager $paginationManager, SerializerInterface $serializer, string $paginationManagerName)
-    {
-        $this->contactManager = $contactManager;
-        $this->paginationManager = $paginationManager;
-        $this->serializer = $serializer;
-        $this->paginationManagerName = $paginationManagerName;
+    public function __construct(
+        private ContactManager $contactManager,
+        private PaginationManager $paginationManager,
+        private SerializerInterface $serializer,
+        private string $paginationManagerName,
+    ) {
     }
 
     /**
@@ -37,9 +32,8 @@ class ContactController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function list(Request $request, $version, $protocol): JsonResponse
     {
         try {
@@ -62,10 +56,9 @@ class ContactController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
-     * @RequestContent(constraints="createConstraints")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
+    #[RequestContent(constraints: 'createConstraints')]
     public function create(Request $request, $version, $protocol, array $requestContent): JsonResponse
     {
         $contact = $this->contactManager->create(
@@ -82,9 +75,8 @@ class ContactController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function read(Request $request, $version, $protocol, string $id): JsonResponse
     {
         if (!$contact = $this->contactManager->find($id)) {
@@ -99,10 +91,9 @@ class ContactController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
-     * @RequestContent(constraints="updateConstraints")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
+    #[RequestContent(constraints: 'updateConstraints')]
     public function update(Request $request, $version, $protocol, array $requestContent, string $id): JsonResponse
     {
         if (!$contact = $this->contactManager->find($id)) {
@@ -120,9 +111,8 @@ class ContactController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function delete(Request $request, $version, $protocol, string $id): JsonResponse
     {
         if (!$contact = $this->contactManager->find($id)) {
@@ -148,10 +138,10 @@ class ContactController
 
     private static function createConstraints(): Assert\Collection
     {
-        return new Assert\Collection([
+        return new Assert\Collection(fields: [
             'channel' => new Assert\Required(new Assert\NotBlank()),
             'name' => new Assert\Required(new Assert\NotBlank()),
-            'addresses' => new Assert\Required(new Assert\All(new Assert\Collection([
+            'addresses' => new Assert\Required(new Assert\All(new Assert\Collection(fields: [
                 'value' => new Assert\Required(new Assert\NotBlank()),
                 'name' => new Assert\Optional(new Assert\NotBlank()),
             ]))),

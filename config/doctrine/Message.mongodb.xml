@@ -3,10 +3,10 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                     http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
-                    
+
     <mapped-superclass name="Oka\Notifier\ServerBundle\Model\Message">
-    	<embed-one field="from" target-document="Oka\Notifier\ServerBundle\Model\Address" />
-    	<embed-one field="to" target-document="Oka\Notifier\ServerBundle\Model\Address" />
+        <embed-one field="from" target-document="Oka\Notifier\ServerBundle\Model\Address" />
+        <embed-one field="to" target-document="Oka\Notifier\ServerBundle\Model\Address" />
         <field field-name="subject" name="subject" type="string" nullable="true" />
         <field field-name="body" name="body" type="string" />
         <field field-name="ownerId" name="owner_id" type="string" nullable="true" />
