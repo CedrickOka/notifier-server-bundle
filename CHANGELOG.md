@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+#### 2.0.0 (2026-09-30)
+
+* Upgrade to Symfony 7.4.
+* Added contact supports
+
 #### 1.10.0 (2022-09-29)
 
 * Added owner support in local channel.
