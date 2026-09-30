@@ -3,7 +3,7 @@
 namespace Oka\Notifier\ServerBundle\Exception;
 
 /**
- * @author Cedrick Oka Baidai <cedric.baidai@veone.net>
+ * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
 class RetryException extends \Exception
 {

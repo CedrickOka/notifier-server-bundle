@@ -23,13 +23,17 @@ class FirebaseChannelHandler implements ChannelHandlerInterface
     {
         $receiver = $notification->getReceiver();
         $attributes = $notification->getAttributes();
-        $message = Messaging\CloudMessage::new()
-            ->withNotification(Messaging\Notification::create($notification->getTitle(), $notification->getMessage(), $attributes['imageUrl'] ?? null));
 
-        unset($attributes['imageUrl']);
+        $message = Messaging\CloudMessage::new()
+            ->withNotification(Messaging\Notification::create(
+                $notification->getTitle(),
+                $notification->getMessage(),
+                $attributes['imageUrl'] ?? null
+            ))
+            ->withHighestPossiblePriority();
 
         if (!empty($attributes)) {
-            $message->withData($attributes);
+            $message->withData($attributes['data']);
         }
 
         switch ($receiver->getName()) {

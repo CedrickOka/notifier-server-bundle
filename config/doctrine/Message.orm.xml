@@ -9,7 +9,6 @@
         <embedded name="to" class="Oka\Notifier\ServerBundle\Model\Address" column-prefix="to_" />
         <field name="subject" column="subject" type="string" nullable="true" />
         <field name="body" column="body" type="text" />
-        <field name="ownerId" column="owner_id" type="string" nullable="true" />
         <field name="issuedAt" column="issued_at" type="datetime" />
 
         <indexes>

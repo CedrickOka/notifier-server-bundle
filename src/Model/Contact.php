@@ -12,24 +12,11 @@ abstract class Contact implements ContactInterface
      */
     protected $id;
 
-    /**
-     * @var string
-     */
-    protected $channel;
-
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var iterable
-     */
-    protected $addresses;
-
-    public function __construct()
-    {
-        $this->addresses = [];
+    public function __construct(
+        protected string $channel,
+        protected string $name,
+        protected iterable $addresses = [],
+    ) {
     }
 
     public function getId(): string
@@ -64,7 +51,7 @@ abstract class Contact implements ContactInterface
     public function getAddresses(): iterable
     {
         return array_map(function ($data) {
-            return Address::fromArray($data);
+            return Address::create($data);
         }, $this->addresses);
     }
 
@@ -73,7 +60,7 @@ abstract class Contact implements ContactInterface
         $this->addresses = [];
 
         foreach ($addresses as $address) {
-            $this->addAddress($address instanceof Address ? $address : Address::fromArray($address));
+            $this->addAddress($address instanceof Address ? $address : Address::create($address));
         }
 
         return $this;
@@ -82,7 +69,7 @@ abstract class Contact implements ContactInterface
     public function addAddress(Address $address): self
     {
         foreach ($this->addresses as $item) {
-            if (true === $address->equals(Address::fromArray($item))) {
+            if (true === $address->equals(Address::create($item))) {
                 return $this;
             }
         }
@@ -95,7 +82,7 @@ abstract class Contact implements ContactInterface
     public function removeAddress(Address $address): self
     {
         foreach ($this->addresses as $key => $item) {
-            if (false === $address->equals(Address::fromArray($item))) {
+            if (false === $address->equals(Address::create($item))) {
                 continue;
             }
 

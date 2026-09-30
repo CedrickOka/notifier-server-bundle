@@ -4,7 +4,7 @@ namespace Oka\Notifier\ServerBundle\Tests\Controller;
 
 use Oka\Notifier\Message\Address;
 use Oka\Notifier\Message\Notification;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Oka\Notifier\ServerBundle\Test\WebTestCase;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
@@ -12,18 +12,14 @@ use Symfony\Component\Messenger\MessageBusInterface;
  */
 class NotificationControllerTest extends WebTestCase
 {
-    /**
-     * @var \Symfony\Bundle\FrameworkBundle\KernelBrowser
-     */
-    private $client;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $message = new Notification(['sms'], new Address('MTN DRIVE'), new Address('22554020558'), 'Hello World!', null);
         $service = $this->createMock(MessageBusInterface::class);
         $service->method('dispatch')->willReturn(new \Symfony\Component\Messenger\Envelope($message));
 
-        $this->client = static::createClient();
         static::getContainer()->set('message_bus', $service);
         static::getContainer()->set('messenger.default_bus', $service);
     }

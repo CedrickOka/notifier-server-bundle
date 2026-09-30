@@ -23,7 +23,7 @@
     <env name="MONGODB_DB" value="db_name"/>
     <env name="SENDER_ADDRESS" value="test"/>
     <env name="RECEIVER_ADDRESS" value="test"/>
-    <env name="NOTIFIER_SMPP_DSN" value="smpp://username:password@hostname:port"/>
+    <env name="NOTIFIER_SMPP_DSN" value="smpp://oyCoOI5YCkIoXz4:JmKNvuiR@smscsim.smpp.org:2775"/>
     <env name="NOTIFIER_CLICKATELL_API_TOKEN" value="test"/>
     <env name="NOTIFIER_WIREPICK_CLIENT_ID" value="test"/>
     <env name="NOTIFIER_WIREPICK_PASSWORD" value="test"/>

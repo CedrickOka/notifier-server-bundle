@@ -1,6 +1,6 @@
 <?php
 
-namespace Oka\Notifier\ServerBundle\Tests\Document;
+namespace Oka\Notifier\ServerBundle\Test\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Attribute as MongoDB;
 use Oka\Notifier\ServerBundle\Model\Message as BaseMessage;

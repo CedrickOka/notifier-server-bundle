@@ -5,8 +5,8 @@ namespace Oka\Notifier\ServerBundle\Tests;
 use Oka\Notifier\Message\Address;
 use Oka\Notifier\Message\Notification;
 use Oka\Notifier\ServerBundle\MessageHandler\NotificationHandler;
-use Oka\Notifier\ServerBundle\Tests\Document\Message;
-use Oka\Notifier\ServerBundle\Tests\Document\SendReport;
+use Oka\Notifier\ServerBundle\Test\Document\Message;
+use Oka\Notifier\ServerBundle\Test\Document\SendReport;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**

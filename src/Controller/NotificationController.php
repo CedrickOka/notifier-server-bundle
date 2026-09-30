@@ -4,7 +4,6 @@ namespace Oka\Notifier\ServerBundle\Controller;
 
 use Oka\InputHandlerBundle\Annotation\AccessControl;
 use Oka\InputHandlerBundle\Annotation\RequestContent;
-use Oka\Notifier\Message\Address;
 use Oka\Notifier\Message\Notification;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +22,7 @@ class NotificationController
     }
 
     /**
-     * Create notification.
+     * Create a notification.
      *
      * @param string $version
      * @param string $protocol
@@ -33,13 +32,9 @@ class NotificationController
     public function create(Request $request, $version, $protocol, array $requestContent): JsonResponse
     {
         foreach ($requestContent['notifications'] as $notification) {
-            $attributes = $notification['attributes'] ?? [];
-            $sender = Address::create($notification['sender']);
-            $receiver = Address::create($notification['receiver']);
-
             $this->bus->dispatch(
-                new Notification($notification['channels'], $sender, $receiver, $notification['message'], $notification['title'] ?? null, $attributes),
-                [new AmqpStamp(null, AMQP_NOPARAM, ['delivery_mode' => AMQP_DURABLE, 'priority' => $attributes['priority'] ?? 0])]
+                Notification::create($notification),
+                [new AmqpStamp(null, AMQP_NOPARAM, ['delivery_mode' => AMQP_DURABLE])]
             );
         }
 
@@ -51,11 +46,11 @@ class NotificationController
         $addressConstraints = new Assert\Callback(function ($object, ExecutionContextInterface $context, $payload) {
             if (true === is_array($object)) {
                 $constraints = new Assert\Collection(fields: [
-                    'name' => new Assert\Optional(new Assert\NotBlank()),
-                    'value' => new Assert\Required(new Assert\NotBlank()),
+                    'name' => new Assert\Optional(new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)])),
+                    'value' => new Assert\Required(new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)])),
                 ]);
             } else {
-                $constraints = new Assert\NotBlank();
+                $constraints = new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)]);
             }
 
             $validator = $context->getValidator()->inContext($context);
@@ -65,12 +60,12 @@ class NotificationController
         return new Assert\Collection(fields: [
             'notifications' => new Assert\All(
                 new Assert\Collection(fields: [
-                    'channels' => new Assert\Required(new Assert\All(new Assert\NotBlank())),
+                    'channels' => new Assert\Required(new Assert\All(new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)]))),
                     'sender' => new Assert\Required($addressConstraints),
                     'receiver' => new Assert\Required($addressConstraints),
                     'message' => new Assert\Required(new Assert\NotBlank()),
                     'title' => new Assert\Optional(new Assert\NotBlank()),
-                    'attributes' => new Assert\Optional(new Assert\Type('array')),
+                    'attributes' => new Assert\Optional(new Assert\Collection(fields: [], allowExtraFields: true)),
                 ])
             ),
         ]);

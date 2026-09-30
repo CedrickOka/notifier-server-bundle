@@ -2,19 +2,14 @@
 
 namespace Oka\Notifier\ServerBundle\Tests\Controller;
 
-use Oka\Notifier\ServerBundle\Tests\Document\SendReport;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Oka\Notifier\ServerBundle\Test\Document\SendReport;
+use Oka\Notifier\ServerBundle\Test\WebTestCase;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
 class SendReportControllerTest extends WebTestCase
 {
-    /**
-     * @var \Symfony\Bundle\FrameworkBundle\KernelBrowser
-     */
-    private $client;
-
     public static function setUpBeforeClass(): void
     {
         static::bootKernel();
@@ -25,13 +20,6 @@ class SendReportControllerTest extends WebTestCase
             ->remove()
             ->getQuery()
             ->execute();
-
-        static::ensureKernelShutdown();
-    }
-
-    public function setUp(): void
-    {
-        $this->client = static::createClient();
     }
 
     /**

@@ -4,7 +4,7 @@ namespace Oka\Notifier\ServerBundle\Tests\Channel;
 
 use Oka\Notifier\Message\Address;
 use Oka\Notifier\Message\Notification;
-use Oka\Notifier\ServerBundle\Tests\Document\Message;
+use Oka\Notifier\ServerBundle\Test\Document\Message;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**

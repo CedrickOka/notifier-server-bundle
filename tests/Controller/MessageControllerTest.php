@@ -4,19 +4,14 @@ namespace Oka\Notifier\ServerBundle\Tests\Controller;
 
 use Oka\Notifier\Message\Address;
 use Oka\Notifier\Message\Notification;
-use Oka\Notifier\ServerBundle\Tests\Document\Message;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Oka\Notifier\ServerBundle\Test\Document\Message;
+use Oka\Notifier\ServerBundle\Test\WebTestCase;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
 class MessageControllerTest extends WebTestCase
 {
-    /**
-     * @var \Symfony\Bundle\FrameworkBundle\KernelBrowser
-     */
-    private $client;
-
     public static function setUpBeforeClass(): void
     {
         static::bootKernel();
@@ -31,13 +26,6 @@ class MessageControllerTest extends WebTestCase
         /** @var \Oka\Notifier\ServerBundle\Channel\LocalChannelHandler $handler */
         $handler = static::getContainer()->get('oka_notifier_server.channel.local_handler');
         $handler->send(new Notification(['local'], Address::create('test'), Address::create('test'), 'Hello World!'));
-
-        static::ensureKernelShutdown();
-    }
-
-    public function setUp(): void
-    {
-        $this->client = static::createClient();
     }
 
     /**

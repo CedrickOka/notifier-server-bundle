@@ -12,35 +12,15 @@ abstract class Message implements MessageInterface
      */
     protected $id;
 
-    /**
-     * @var Address
-     */
-    protected $from;
+    protected ?\DateTime $issuedAt = null;
 
-    /**
-     * @var Address
-     */
-    protected $to;
-
-    /**
-     * @var string
-     */
-    protected $body;
-
-    /**
-     * @var string
-     */
-    protected $subject;
-
-    /**
-     * @var string
-     */
-    protected $ownerId;
-
-    /**
-     * @var \DateTime
-     */
-    protected $issuedAt;
+    public function __construct(
+        protected Address $from,
+        protected Address $to,
+        protected string $body,
+        protected ?string $subject = null,
+    ) {
+    }
 
     public function getId(): string
     {
@@ -95,19 +75,7 @@ abstract class Message implements MessageInterface
         return $this;
     }
 
-    public function getOwnerId(): ?string
-    {
-        return $this->ownerId;
-    }
-
-    public function setOwnerId(string $ownerId): self
-    {
-        $this->ownerId = $ownerId;
-
-        return $this;
-    }
-
-    public function getIssuedAt(): \DateTimeInterface
+    public function getIssuedAt(): ?\DateTimeInterface
     {
         return $this->issuedAt;
     }
@@ -121,8 +89,6 @@ abstract class Message implements MessageInterface
 
     public function prePersist()
     {
-        if (null === $this->issuedAt) {
-            $this->issuedAt = new \DateTime();
-        }
+        $this->issuedAt = new \DateTime();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Oka\Notifier\ServerBundle\Service;
 
+use Oka\Notifier\ServerBundle\Model\SendReport;
 use Oka\Notifier\ServerBundle\Model\SendReportInterface;
 
 /**
@@ -9,15 +10,15 @@ use Oka\Notifier\ServerBundle\Model\SendReportInterface;
  */
 class SendReportManager extends AbstractObjectManager
 {
-    public function create(string $channel, array $payload = [], \DateTimeInterface $issuedAt = null): SendReportInterface
+    public function create(string $channel, array $payload = []): SendReportInterface
     {
-        /** @var \Oka\Notifier\ServerBundle\Model\SendReportInterface $report */
-        $report = new $this->class();
-        $report->setChannel($channel);
-        $report->setPayload($payload);
-
-        if (null !== $issuedAt) {
-            $report->setIssuedAt($issuedAt);
+        /* @var \Oka\Notifier\ServerBundle\Model\SendReportInterface $report */
+        if ((new \ReflectionClass($this->class))->isSubclassOf(SendReport::class)) {
+            $report = new $this->class($channel, $payload);
+        } else {
+            $report = new $this->class();
+            $report->setChannel($channel);
+            $report->setPayload($payload);
         }
 
         if (false === $this->objectManager->contains($report)) {
@@ -27,10 +28,5 @@ class SendReportManager extends AbstractObjectManager
         $this->objectManager->flush();
 
         return $report;
-    }
-
-    public function find($id): SendReportInterface
-    {
-        return $this->objectRepository->find($id);
     }
 }

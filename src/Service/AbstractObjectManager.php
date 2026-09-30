@@ -33,6 +33,31 @@ abstract class AbstractObjectManager
         $this->objectRepository = $objectManager->getRepository($this->class);
     }
 
+    public function save(mixed $object): void
+    {
+        if (false === $this->objectManager->contains($object)) {
+            $this->objectManager->persist($object);
+        }
+
+        $this->objectManager->flush();
+    }
+
+    public function remove(mixed $object): void
+    {
+        $this->objectManager->remove($object);
+        $this->objectManager->flush();
+    }
+
+    public function find($id): ?object
+    {
+        return $this->objectRepository->find($id);
+    }
+
+    public function findOneBy(array $criteria): ?object
+    {
+        return $this->objectRepository->findOneBy($criteria);
+    }
+
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
         return $this->objectRepository->findBy($criteria, $orderBy, $limit, $offset);

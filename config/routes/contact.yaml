@@ -3,20 +3,15 @@ oka_notifier_server_contacts_list:
     path: /{version}/{protocol}/contacts
     controller: Oka\Notifier\ServerBundle\Controller\ContactController::list
 
-oka_notifier_server_contacts_create:
+oka_notifier_server_contacts_create_or_update:
     methods: POST
     path: /{version}/{protocol}/contacts
-    controller: Oka\Notifier\ServerBundle\Controller\ContactController::create
+    controller: Oka\Notifier\ServerBundle\Controller\ContactController::createOrUpdate
 
 oka_notifier_server_contacts_read:
     methods: GET
     path: /{version}/{protocol}/contacts/{id}
     controller: Oka\Notifier\ServerBundle\Controller\ContactController::read
-
-oka_notifier_server_contacts_update:
-    methods: [PUT, PATCH]
-    path: /{version}/{protocol}/contacts/{id}
-    controller: Oka\Notifier\ServerBundle\Controller\ContactController::update
 
 oka_notifier_server_contacts_delete:
     methods: DELETE

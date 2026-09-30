@@ -2,19 +2,14 @@
 
 namespace Oka\Notifier\ServerBundle\Tests\Controller;
 
-use Oka\Notifier\ServerBundle\Tests\Document\Contact;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Oka\Notifier\ServerBundle\Test\Document\Contact;
+use Oka\Notifier\ServerBundle\Test\WebTestCase;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
 class ContactControllerTest extends WebTestCase
 {
-    /**
-     * @var \Symfony\Bundle\FrameworkBundle\KernelBrowser
-     */
-    private $client;
-
     public static function setUpBeforeClass(): void
     {
         static::bootKernel();
@@ -25,13 +20,6 @@ class ContactControllerTest extends WebTestCase
             ->remove()
             ->getQuery()
             ->execute();
-
-        static::ensureKernelShutdown();
-    }
-
-    public function setUp(): void
-    {
-        $this->client = static::createClient();
     }
 
     /**
@@ -47,9 +35,9 @@ class ContactControllerTest extends WebTestCase
             ['CONTENT_TYPE' => 'application/json'],
             <<<EOF
 {
-	"channel": "firebase",
-	"name": "johndoe",
-	"addresses": [
+    "channel": "firebase",
+    "name": "johndoe",
+    "addresses": [
         {"value": "0707070707"}
     ]
 }
@@ -109,14 +97,16 @@ EOF
     public function testCanUpdateContact(array $depend)
     {
         $this->client->request(
-            'PATCH',
-            sprintf('/v1/rest/contacts/%s', $depend['id']),
+            'POST',
+            '/v1/rest/contacts',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
             <<<EOF
 {
-	"addresses": [
+    "channel": "firebase",
+    "name": "johndoe",
+    "addresses": [
         {
             "value": "0707070707",
             "name": "orange"

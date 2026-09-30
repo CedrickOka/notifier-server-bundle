@@ -10,6 +10,9 @@
         <field name="addresses" column="addresses" type="json" />
 
         <indexes>
+            <index name="contact_channel" columns="channel"/>
+        </indexes>
+        <indexes>
             <index name="contact_name" columns="name"/>
         </indexes>
 

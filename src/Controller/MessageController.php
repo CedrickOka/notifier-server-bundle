@@ -49,7 +49,7 @@ class MessageController
     }
 
     /**
-     * Read message details.
+     * Read a message details.
      *
      * @param string $version
      * @param string $protocol
@@ -57,6 +57,7 @@ class MessageController
     #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function read(Request $request, $version, $protocol, string $id): JsonResponse
     {
+        /** @var \Oka\Notifier\ServerBundle\Model\MessageInterface $message */
         if (!$message = $this->messageManager->find($id)) {
             throw new NotFoundHttpException(sprintf('Message with resource identifier "%s" is not found.', $id));
         }
@@ -65,7 +66,7 @@ class MessageController
     }
 
     /**
-     * Delete message.
+     * Delete a message.
      *
      * @param string $version
      * @param string $protocol
@@ -73,6 +74,7 @@ class MessageController
     #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function delete(Request $request, $version, $protocol, string $id): JsonResponse
     {
+        /** @var \Oka\Notifier\ServerBundle\Model\MessageInterface $message */
         if (!$message = $this->messageManager->find($id)) {
             throw new NotFoundHttpException(sprintf('Message with resource identifier "%s" is not found.', $id));
         }

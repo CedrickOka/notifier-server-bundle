@@ -17,7 +17,7 @@ interface SendReportInterface
 
     public function setPayload(array $payload): self;
 
-    public function getIssuedAt(): \DateTimeInterface;
+    public function getIssuedAt(): ?\DateTimeInterface;
 
     public function setIssuedAt(\DateTimeInterface $issuedAt): self;
 }
