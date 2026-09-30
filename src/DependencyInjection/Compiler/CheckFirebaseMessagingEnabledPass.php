@@ -18,3 +18,4 @@ class CheckFirebaseMessagingEnabledPass implements CompilerPassInterface
         }
     }
 }
+// kreait_firebase.my_project.messaging

@@ -21,7 +21,8 @@ class LoggerPass implements CompilerPassInterface
             throw new \InvalidArgumentException(sprintf('Invalid service "%s" given.', $container->getParameter('oka_notifier_server.logger_id')));
         }
 
-        $definition = $container->getDefinition('oka_notifier_server.messenger.notification_handler');
-        $definition->replaceArgument(2, new Reference($container->getParameter('oka_notifier_server.logger_id')));
+        // Configure "oka_notifier_server.messenger.notification_handler" service
+        $notificationHandlerDefinition = $container->getDefinition('oka_notifier_server.messenger.notification_handler');
+        $notificationHandlerDefinition->replaceArgument(3, new Reference($container->getParameter('oka_notifier_server.logger_id')));
     }
 }

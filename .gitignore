@@ -9,24 +9,3 @@ composer.phar
 /var/
 /vendor/*
 !/vendor/onlinecity/
-
-### Eclipse ###
-
-bin/
-tmp/
-*.tmp
-*.bak
-*~.nib
-local.properties
-.settings/
-.loadpath
-.recommenders
-
-# PDT-specific (PHP Development Tools)
-.buildpath
-
-### Eclipse Patch ###
-
-# Eclipse Core ###
-.project
-/vendor/

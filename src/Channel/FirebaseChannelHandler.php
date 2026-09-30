@@ -2,7 +2,9 @@
 
 namespace Oka\Notifier\ServerBundle\Channel;
 
-use Kreait\Firebase\Messaging;
+use Kreait\Firebase\Contract\Messaging;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification as CloudNotification;
 use Oka\Notifier\Message\Notification;
 
 /**
@@ -24,8 +26,8 @@ class FirebaseChannelHandler implements ChannelHandlerInterface
         $receiver = $notification->getReceiver();
         $attributes = $notification->getAttributes();
 
-        $message = Messaging\CloudMessage::new()
-            ->withNotification(Messaging\Notification::create(
+        $message = CloudMessage::new()
+            ->withNotification(CloudNotification::create(
                 $notification->getTitle(),
                 $notification->getMessage(),
                 $attributes['imageUrl'] ?? null

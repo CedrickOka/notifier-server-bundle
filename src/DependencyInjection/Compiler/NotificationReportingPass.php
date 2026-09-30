@@ -36,6 +36,6 @@ class NotificationReportingPass implements CompilerPassInterface
 
         // Configure "oka_notifier_server.messenger.notification_handler" service
         $notificationHandlerDefinition = $container->getDefinition('oka_notifier_server.messenger.notification_handler');
-        $notificationHandlerDefinition->replaceArgument(1, new Reference('oka_notifier_server.send_report_manager'));
+        $notificationHandlerDefinition->replaceArgument(2, new Reference('oka_notifier_server.send_report_manager'));
     }
 }

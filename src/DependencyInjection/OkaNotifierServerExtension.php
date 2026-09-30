@@ -143,7 +143,7 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
         $container->prependExtensionConfig('framework', [
             'messenger' => [
                 'transports' => [
-                    'notification' => [
+                    $config['messenger']['transport_name'] => [
                         'dsn' => '%env(MESSENGER_TRANSPORT_DSN)%',
                         'options' => [
                             'queues' => [
@@ -158,7 +158,7 @@ class OkaNotifierServerExtension extends Extension implements PrependExtensionIn
                         ],
                     ],
                 ],
-                'routing' => [Notification::class => $config['messenger']['default_publish_routing_key']],
+                'routing' => [Notification::class => $config['messenger']['transport_name']],
             ],
         ]);
     }

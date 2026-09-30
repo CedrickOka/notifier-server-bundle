@@ -28,6 +28,7 @@
     <env name="NOTIFIER_WIREPICK_CLIENT_ID" value="test"/>
     <env name="NOTIFIER_WIREPICK_PASSWORD" value="test"/>
     <env name="NOTIFIER_INFOBIP_API_KEY" value="test"/>
+    <env name="FIREBASE_CREDENTIALS" value="%kernel.project_dir%/tests/firebase.json"/>
   </php>
 
   <testsuites>

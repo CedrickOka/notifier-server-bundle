@@ -176,6 +176,11 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue('messenger.default_bus')
                         ->end()
 
+                        ->scalarNode('transport_name')
+                            ->cannotBeEmpty()
+                            ->defaultValue('notification')
+                        ->end()
+
                         ->scalarNode('queue_name')
                             ->cannotBeEmpty()
                             ->defaultValue('messages.notifier.notification')

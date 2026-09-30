@@ -33,5 +33,9 @@ class ContactPass implements CompilerPassInterface
 
         $contactManagerDefinition = $container->getDefinition('oka_notifier_server.contact_manager');
         $contactManagerDefinition->replaceArgument(0, new Reference('oka_notifier_server.contact.object_manager'));
+
+        // Configure "oka_notifier_server.messenger.notification_handler" service
+        $notificationHandlerDefinition = $container->getDefinition('oka_notifier_server.messenger.notification_handler');
+        $notificationHandlerDefinition->replaceArgument(1, new Reference('oka_notifier_server.contact_manager'));
     }
 }

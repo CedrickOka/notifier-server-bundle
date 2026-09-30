@@ -32,6 +32,10 @@ framework:
     http_client:
         mock_response_factory: Oka\Notifier\ServerBundle\Tests\MockHttpClientCallback
 
+    messenger:
+        transports:
+            notification: 'sync://'
+
 doctrine:
     dbal:
         connections:

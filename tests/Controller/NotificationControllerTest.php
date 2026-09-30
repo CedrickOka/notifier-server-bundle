@@ -2,28 +2,13 @@
 
 namespace Oka\Notifier\ServerBundle\Tests\Controller;
 
-use Oka\Notifier\Message\Address;
-use Oka\Notifier\Message\Notification;
 use Oka\Notifier\ServerBundle\Test\WebTestCase;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
 class NotificationControllerTest extends WebTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $message = new Notification(['sms'], new Address('MTN DRIVE'), new Address('22554020558'), 'Hello World!', null);
-        $service = $this->createMock(MessageBusInterface::class);
-        $service->method('dispatch')->willReturn(new \Symfony\Component\Messenger\Envelope($message));
-
-        static::getContainer()->set('message_bus', $service);
-        static::getContainer()->set('messenger.default_bus', $service);
-    }
-
     /**
      * @covers
      */
@@ -31,21 +16,19 @@ class NotificationControllerTest extends WebTestCase
     {
         $this->client->request('POST', '/v1/rest/notifications', [], [], [
             'CONTENT_TYPE' => 'application/json',
-        ], '{"notifications": [{"channels": ["sms"], "sender": "MTN DRIVE", "receiver": "22554020558", "message": "Hello World!"}]}');
+        ], '{"notifications": [{"channels": ["clickatell"], "sender": "Notifier", "receiver": "+2250707070707", "message": "Hello World!"}]}');
 
         $this->assertResponseStatusCodeSame(204);
     }
 
     /**
      * @covers
-     *
-     * @depends testCanSendNotificatonOnSMSChannel
      */
     public function testCannotSendNotificatonWithAWrongReceiver()
     {
         $this->client->request('POST', '/v1/rest/notifications', [], [], [
             'CONTENT_TYPE' => 'application/json',
-        ], '{"notifications": [{"channels": ["sms"], "sender": "MTN DRIVE", "receiver": {"name": "22554020558"}, "message": "Hello World!"}]}');
+        ], '{"notifications": [{"channels": ["clickatell"], "sender": "Notifier", "receiver": {"name": "2250707070707"}, "message": "Hello World!"}]}');
 
         $this->assertResponseStatusCodeSame(400);
     }
