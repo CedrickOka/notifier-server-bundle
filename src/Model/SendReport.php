@@ -12,20 +12,13 @@ abstract class SendReport implements SendReportInterface
      */
     protected $id;
 
-    /**
-     * @var string
-     */
-    protected $channel;
+    protected ?\DateTimeInterface $issuedAt = null;
 
-    /**
-     * @var array
-     */
-    protected $payload;
-
-    /**
-     * @var \DateTime
-     */
-    protected $issuedAt;
+    public function __construct(
+        protected string $channel,
+        protected array $payload,
+    ) {
+    }
 
     public function getId(): string
     {
@@ -56,7 +49,7 @@ abstract class SendReport implements SendReportInterface
         return $this;
     }
 
-    public function getIssuedAt(): \DateTimeInterface
+    public function getIssuedAt(): ?\DateTimeInterface
     {
         return $this->issuedAt;
     }
@@ -70,8 +63,6 @@ abstract class SendReport implements SendReportInterface
 
     public function prePersist()
     {
-        if (null === $this->issuedAt) {
-            $this->issuedAt = new \DateTime();
-        }
+        $this->issuedAt = new \DateTime();
     }
 }

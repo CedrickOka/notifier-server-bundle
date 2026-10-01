@@ -10,10 +10,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class CheckFirebaseMessagingEnabledPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
-        if (true === $container->hasDefinition('oka_notifier_server.channel.firebase_handler') && false === class_exists('Kreait\Firebase\Messaging')) {
+        if (true === $container->hasDefinition('oka_notifier_server.channel.firebase_handler')
+            && false === class_exists('Kreait\Firebase\Messaging')) {
             throw new \LogicException('To enable firebase channel handler you have to install the "kreait/firebase-bundle".');
         }
     }
 }
+// kreait_firebase.my_project.messaging

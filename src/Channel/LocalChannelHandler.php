@@ -11,11 +11,8 @@ use Oka\Notifier\ServerBundle\Service\MessageManager;
  */
 class LocalChannelHandler implements ChannelHandlerInterface
 {
-    private $messageManager;
-
-    public function __construct(MessageManager $messageManager)
+    public function __construct(private MessageManager $messageManager)
     {
-        $this->messageManager = $messageManager;
     }
 
     public function supports(Notification $notification): bool
@@ -25,14 +22,11 @@ class LocalChannelHandler implements ChannelHandlerInterface
 
     public function send(Notification $notification): void
     {
-        $attributes = $notification->getAttributes();
-
         $this->messageManager->create(
-            Address::fromArray($notification->getSender()->toArray()),
-            Address::fromArray($notification->getReceiver()->toArray()),
+            Address::create($notification->getSender()->toArray()),
+            Address::create($notification->getReceiver()->toArray()),
             $notification->getMessage(),
             $notification->getTitle(),
-            $attributes['ownerId'] ?? null
         );
     }
 

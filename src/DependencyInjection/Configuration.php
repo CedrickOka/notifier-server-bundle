@@ -14,7 +14,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('oka_notifier_server');
         /** @var ArrayNodeDefinition $rootNode */
@@ -174,6 +174,11 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('bus_id')
                             ->cannotBeEmpty()
                             ->defaultValue('messenger.default_bus')
+                        ->end()
+
+                        ->scalarNode('transport_name')
+                            ->cannotBeEmpty()
+                            ->defaultValue('notification')
                         ->end()
 
                         ->scalarNode('queue_name')

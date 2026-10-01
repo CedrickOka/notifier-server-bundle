@@ -1,24 +1,22 @@
 <?php
 
-namespace Oka\Notifier\ServerBundle\Tests\Entity;
+namespace Oka\Notifier\ServerBundle\Test\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oka\Notifier\ServerBundle\Model\SendReport as BaseSendReport;
 
 /**
- * @ORM\Entity()
- * @ORM\Table(name="send_report")
- *
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
+#[ORM\Entity()]
+#[ORM\Table(name: 'send_report')]
 class SendReport extends BaseSendReport
 {
     /**
-     * @ORM\Id()
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     *
      * @var string
      */
+    #[ORM\Id()]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 }

@@ -12,11 +12,8 @@ use Symfony\Component\Mime\Email;
  */
 class EmailChannelHandler implements ChannelHandlerInterface
 {
-    private $mailer;
-
-    public function __construct(MailerInterface $mailer)
+    public function __construct(private MailerInterface $mailer)
     {
-        $this->mailer = $mailer;
     }
 
     public function supports(Notification $notification): bool

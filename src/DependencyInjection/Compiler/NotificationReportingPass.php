@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class NotificationReportingPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (false === $container->has('oka_notifier_server.send_report_controller')) {
             return;
@@ -36,6 +36,6 @@ class NotificationReportingPass implements CompilerPassInterface
 
         // Configure "oka_notifier_server.messenger.notification_handler" service
         $notificationHandlerDefinition = $container->getDefinition('oka_notifier_server.messenger.notification_handler');
-        $notificationHandlerDefinition->replaceArgument(1, new Reference('oka_notifier_server.send_report_manager'));
+        $notificationHandlerDefinition->replaceArgument(2, new Reference('oka_notifier_server.send_report_manager'));
     }
 }

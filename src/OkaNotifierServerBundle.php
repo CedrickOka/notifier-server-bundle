@@ -5,7 +5,6 @@ namespace Oka\Notifier\ServerBundle;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckFirebaseMessagingEnabledPass;
-use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckGuzzleHttpEnabledPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckMailerEnabledPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\CheckPaginationEnabledPass;
 use Oka\Notifier\ServerBundle\DependencyInjection\Compiler\ContactPass;
@@ -40,14 +39,12 @@ class OkaNotifierServerBundle extends Bundle
         return \dirname(__DIR__);
     }
 
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 
-        $this->addRegisterMappingsPass($container);
-
+        $this->addDoctrineMappingsPass($container);
         $container->addCompilerPass(new CheckMailerEnabledPass());
-        $container->addCompilerPass(new CheckGuzzleHttpEnabledPass());
         $container->addCompilerPass(new CheckFirebaseMessagingEnabledPass());
         $container->addCompilerPass(new CheckPaginationEnabledPass());
         $container->addCompilerPass(new LocalChannelPass());
@@ -57,7 +54,7 @@ class OkaNotifierServerBundle extends Bundle
         $container->addCompilerPass(new LoggerPass());
     }
 
-    private function addRegisterMappingsPass(ContainerBuilder $container)
+    private function addDoctrineMappingsPass(ContainerBuilder $container): void
     {
         $mapping = [realpath(__DIR__.'/../config/doctrine') => 'Oka\Notifier\ServerBundle\Model'];
 

@@ -11,6 +11,10 @@
 
         <indexes>
             <index unique="false">
+                <key name="channel" order="asc" />
+                <option name="background" value="true" />
+            </index>
+            <index unique="false">
                 <key name="name" order="asc" />
                 <option name="background" value="true" />
             </index>

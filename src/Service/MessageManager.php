@@ -3,6 +3,7 @@
 namespace Oka\Notifier\ServerBundle\Service;
 
 use Oka\Notifier\ServerBundle\Model\Address;
+use Oka\Notifier\ServerBundle\Model\Message;
 use Oka\Notifier\ServerBundle\Model\MessageInterface;
 
 /**
@@ -10,20 +11,20 @@ use Oka\Notifier\ServerBundle\Model\MessageInterface;
  */
 class MessageManager extends AbstractObjectManager
 {
-    public function create(Address $from, Address $to, string $body, string $subject = null, string $ownerId = null): MessageInterface
+    public function create(Address $from, Address $to, string $body, ?string $subject = null): MessageInterface
     {
-        /** @var \Oka\Notifier\ServerBundle\Model\MessageInterface $message */
-        $message = new $this->class();
-        $message->setFrom($from);
-        $message->setTo($to);
-        $message->setBody($body);
+        /* @var \Oka\Notifier\ServerBundle\Model\MessageInterface $message */
+        if ((new \ReflectionClass($this->class))->isSubclassOf(Message::class)) {
+            $message = new $this->class($from, $to, $body, $subject);
+        } else {
+            $message = new $this->class();
+            $message->setFrom($from);
+            $message->setTo($to);
+            $message->setBody($body);
 
-        if (null !== $subject) {
-            $message->setSubject($subject);
-        }
-
-        if (null !== $ownerId) {
-            $message->setOwnerId($ownerId);
+            if (null !== $subject) {
+                $message->setSubject($subject);
+            }
         }
 
         if (false === $this->objectManager->contains($message)) {
@@ -33,16 +34,5 @@ class MessageManager extends AbstractObjectManager
         $this->objectManager->flush();
 
         return $message;
-    }
-
-    public function find($id): MessageInterface
-    {
-        return $this->objectRepository->find($id);
-    }
-
-    public function remove(MessageInterface $message): void
-    {
-        $this->objectManager->remove($message);
-        $this->objectManager->flush();
     }
 }

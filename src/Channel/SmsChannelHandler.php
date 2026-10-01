@@ -9,12 +9,10 @@ use Oka\Notifier\Message\Notification;
  */
 class SmsChannelHandler implements ChannelHandlerInterface
 {
-    private $handlers;
-    private $delegateHandlerName;
+    private ?string $delegateHandlerName = null;
 
-    public function __construct(iterable $handlers)
+    public function __construct(private iterable $handlers)
     {
-        $this->handlers = $handlers;
     }
 
     public function supports(Notification $notification): bool
@@ -26,7 +24,7 @@ class SmsChannelHandler implements ChannelHandlerInterface
     {
         $lastError = null;
 
-        /** @var \Oka\Notifier\ServerBundle\Channel\ChannelHandlerInterface $handler */
+        /** @var ChannelHandlerInterface $handler */
         foreach ($this->handlers as $handler) {
             try {
                 $handler->send($notification);

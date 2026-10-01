@@ -19,17 +19,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ContactController
 {
-    private $contactManager;
-    private $paginationManager;
-    private $serializer;
-    private $paginationManagerName;
-
-    public function __construct(ContactManager $contactManager, PaginationManager $paginationManager, SerializerInterface $serializer, string $paginationManagerName)
-    {
-        $this->contactManager = $contactManager;
-        $this->paginationManager = $paginationManager;
-        $this->serializer = $serializer;
-        $this->paginationManagerName = $paginationManagerName;
+    public function __construct(
+        private ContactManager $contactManager,
+        private PaginationManager $paginationManager,
+        private SerializerInterface $serializer,
+        private string $paginationManagerName,
+    ) {
     }
 
     /**
@@ -37,9 +32,8 @@ class ContactController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function list(Request $request, $version, $protocol): JsonResponse
     {
         try {
@@ -58,35 +52,44 @@ class ContactController
     }
 
     /**
-     * Create contact.
+     * Create or update a contact.
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
-     * @RequestContent(constraints="createConstraints")
      */
-    public function create(Request $request, $version, $protocol, array $requestContent): JsonResponse
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
+    #[RequestContent(constraints: 'createOrUpdateConstraints')]
+    public function createOrUpdate(Request $request, $version, $protocol, array $requestContent): JsonResponse
     {
-        $contact = $this->contactManager->create(
-            $requestContent['channel'],
-            $requestContent['name'],
-            $requestContent['addresses']
-        );
+        $addresses = $requestContent['addresses'];
+        unset($requestContent['addresses']);
 
-        return $this->json($contact, 201);
+        /** @var \Oka\Notifier\ServerBundle\Model\ContactInterface $contact */
+        if (!$contact = $this->contactManager->findOneBy($requestContent)) {
+            $contact = $this->contactManager->create(
+                $requestContent['channel'],
+                $requestContent['name'],
+                $addresses
+            );
+        } else {
+            $contact->setAddresses($addresses);
+            $this->contactManager->save($contact);
+            $statusCode = 200;
+        }
+
+        return $this->json($contact, $statusCode ?? 201);
     }
 
     /**
-     * Read contact details.
+     * Read a contact details.
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function read(Request $request, $version, $protocol, string $id): JsonResponse
     {
+        /** @var \Oka\Notifier\ServerBundle\Model\ContactInterface $contact */
         if (!$contact = $this->contactManager->find($id)) {
             throw new NotFoundHttpException(sprintf('Contact with resource identifier "%s" is not found.', $id));
         }
@@ -95,36 +98,15 @@ class ContactController
     }
 
     /**
-     * Update contact.
+     * Delete a contact.
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
-     * @RequestContent(constraints="updateConstraints")
      */
-    public function update(Request $request, $version, $protocol, array $requestContent, string $id): JsonResponse
-    {
-        if (!$contact = $this->contactManager->find($id)) {
-            throw new NotFoundHttpException(sprintf('Contact with resource identifier "%s" is not found.', $id));
-        }
-
-        $contact->setAddresses($requestContent['addresses']);
-        $this->contactManager->save($contact);
-
-        return $this->json($contact);
-    }
-
-    /**
-     * Delete contact.
-     *
-     * @param string $version
-     * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
-     */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function delete(Request $request, $version, $protocol, string $id): JsonResponse
     {
+        /** @var \Oka\Notifier\ServerBundle\Model\ContactInterface $contact */
         if (!$contact = $this->contactManager->find($id)) {
             throw new NotFoundHttpException(sprintf('Contact with resource identifier "%s" is not found.', $id));
         }
@@ -146,23 +128,15 @@ class ContactController
         return new JsonResponse($this->serializer->serialize($data, 'json', $context), $statusCode, $headers, true);
     }
 
-    private static function createConstraints(): Assert\Collection
+    private static function createOrUpdateConstraints(): Assert\Collection
     {
-        return new Assert\Collection([
-            'channel' => new Assert\Required(new Assert\NotBlank()),
-            'name' => new Assert\Required(new Assert\NotBlank()),
-            'addresses' => new Assert\Required(new Assert\All(new Assert\Collection([
-                'value' => new Assert\Required(new Assert\NotBlank()),
-                'name' => new Assert\Optional(new Assert\NotBlank()),
+        return new Assert\Collection(fields: [
+            'channel' => new Assert\Required(new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)])),
+            'name' => new Assert\Required(new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)])),
+            'addresses' => new Assert\Required(new Assert\All(new Assert\Collection(fields: [
+                'value' => new Assert\Required(new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)])),
+                'name' => new Assert\Optional(new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)])),
             ]))),
         ]);
-    }
-
-    private static function updateConstraints(): Assert\Collection
-    {
-        $constraints = self::createConstraints();
-        unset($constraints->fields['channel'], $constraints->fields['name']);
-
-        return $constraints;
     }
 }

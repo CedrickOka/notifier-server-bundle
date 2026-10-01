@@ -2,31 +2,21 @@
 
 namespace Oka\Notifier\ServerBundle\Channel;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\RequestOptions;
 use Oka\Notifier\Message\Notification;
 use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
  */
 class InfobipChannelHandler implements SmsChannelHandlerInterface
 {
-    /**
-     * @var \GuzzleHttp\ClientInterface
-     */
-    private $httpClient;
-
-    public function __construct(string $apiKey, bool $debug)
+    public function __construct(private HttpClientInterface $httpClient, string $apiKey, bool $debug)
     {
-        $this->httpClient = new Client([
+        $this->httpClient = $httpClient->withOptions([
             'base_uri' => 'https://api.infobip.com',
-            RequestOptions::DEBUG => $debug,
-            RequestOptions::HEADERS => [
-                'Accept' => 'application/json',
-                'Authorization' => sprintf('App %s', $apiKey),
-            ],
+            'headers' => ['Authorization' => sprintf('App %s', $apiKey)],
         ]);
     }
 
@@ -37,10 +27,11 @@ class InfobipChannelHandler implements SmsChannelHandlerInterface
 
     public function send(Notification $notification): void
     {
-        try {
-            /** @var \Psr\Http\Message\ResponseInterface $response */
-            $response = $this->httpClient->post('/sms/2/text/advanced', [
-                RequestOptions::JSON => [
+        $response = $this->httpClient->request(
+            'POST',
+            '/sms/2/text/advanced',
+            [
+                'json' => [
                     'messages' => [
                         [
                             'from' => $notification->getSender()->getValue(),
@@ -51,8 +42,12 @@ class InfobipChannelHandler implements SmsChannelHandlerInterface
                         ],
                     ],
                 ],
-            ]);
-        } catch (ClientException $e) {
+            ]
+        );
+
+        try {
+            $response->getContent();
+        } catch (ExceptionInterface $e) {
             throw new InvalidNotificationException(null, null, $e);
         }
     }

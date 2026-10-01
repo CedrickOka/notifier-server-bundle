@@ -16,17 +16,12 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class MessageController
 {
-    private $messageManager;
-    private $paginationManager;
-    private $serializer;
-    private $paginationManagerName;
-
-    public function __construct(MessageManager $messageManager, PaginationManager $paginationManager, SerializerInterface $serializer, string $paginationManagerName)
-    {
-        $this->messageManager = $messageManager;
-        $this->paginationManager = $paginationManager;
-        $this->serializer = $serializer;
-        $this->paginationManagerName = $paginationManagerName;
+    public function __construct(
+        private MessageManager $messageManager,
+        private PaginationManager $paginationManager,
+        private SerializerInterface $serializer,
+        private string $paginationManagerName,
+    ) {
     }
 
     /**
@@ -34,9 +29,8 @@ class MessageController
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function list(Request $request, $version, $protocol): JsonResponse
     {
         try {
@@ -55,15 +49,15 @@ class MessageController
     }
 
     /**
-     * Read message details.
+     * Read a message details.
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function read(Request $request, $version, $protocol, string $id): JsonResponse
     {
+        /** @var \Oka\Notifier\ServerBundle\Model\MessageInterface $message */
         if (!$message = $this->messageManager->find($id)) {
             throw new NotFoundHttpException(sprintf('Message with resource identifier "%s" is not found.', $id));
         }
@@ -72,15 +66,15 @@ class MessageController
     }
 
     /**
-     * Delete message.
+     * Delete a message.
      *
      * @param string $version
      * @param string $protocol
-     *
-     * @AccessControl(version="v1", protocol="rest", formats="json")
      */
+    #[AccessControl(version: 'v1', protocol: 'rest', formats: ['json'])]
     public function delete(Request $request, $version, $protocol, string $id): JsonResponse
     {
+        /** @var \Oka\Notifier\ServerBundle\Model\MessageInterface $message */
         if (!$message = $this->messageManager->find($id)) {
             throw new NotFoundHttpException(sprintf('Message with resource identifier "%s" is not found.', $id));
         }

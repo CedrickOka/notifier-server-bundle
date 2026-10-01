@@ -3,7 +3,8 @@ framework:
     secret: 'secret'
     default_locale: 'fr'
     session:
-        storage_id: session.storage.mock_file
+        storage_factory_id: session.storage.factory.mock_file
+        handler_id: null
     php_errors:
         log: true
 
@@ -25,6 +26,13 @@ framework:
         resource: '%kernel.project_dir%/tests/routes.yaml'
         utf8: true
 
+    http_client:
+        mock_response_factory: Oka\Notifier\ServerBundle\Tests\MockHttpClientCallback
+
+    messenger:
+        transports:
+            notification: 'sync://'
+
 doctrine:
     dbal:
         connections:
@@ -33,14 +41,17 @@ doctrine:
                 url: '%env(resolve:DATABASE_URL)%'
     orm:
         auto_generate_proxy_classes: true
+        enable_lazy_ghost_objects: true
+        report_fields_where_declared: true
+        validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-        auto_mapping: true
+        auto_mapping: false
         mappings:
             App:
                 is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/tests/Entity'
-                prefix: 'Oka\Notifier\ServerBundle\Tests\Entity'
+                type: attribute
+                dir: '%kernel.project_dir%/src/Test/Entity'
+                prefix: 'Oka\Notifier\ServerBundle\Test\Entity'
                 alias: App
 
 doctrine_mongodb:
@@ -53,13 +64,13 @@ doctrine_mongodb:
     default_database: '%env(resolve:MONGODB_DB)%'
     document_managers:
         default:
-            auto_mapping: true
+            auto_mapping: false
             mappings:
                 App:
                     is_bundle: false
-                    type: annotation
-                    dir: '%kernel.project_dir%/tests/Document'
-                    prefix: 'Oka\Notifier\ServerBundle\Tests\Document'
+                    type: attribute
+                    dir: '%kernel.project_dir%/src/Test/Document'
+                    prefix: 'Oka\Notifier\ServerBundle\Test\Document'
                     alias: App
 
 kreait_firebase:
@@ -69,7 +80,7 @@ kreait_firebase:
 
 oka_input_handler:
     error_handler:
-        default_request_format: 'json'
+        default_request_format: ~ #'json'
         override_problem_normalizer: true
 
 oka_pagination:
@@ -77,7 +88,7 @@ oka_pagination:
     pagination_managers:
         contact:
             db_driver: mongodb
-            class: Oka\Notifier\ServerBundle\Tests\Document\Contact
+            class: Oka\Notifier\ServerBundle\Test\Document\Contact
             filters:
                 channel:
                     cast_type: string
@@ -85,7 +96,7 @@ oka_pagination:
                     cast_type: string
         message:
             db_driver: mongodb
-            class: Oka\Notifier\ServerBundle\Tests\Document\Message
+            class: Oka\Notifier\ServerBundle\Test\Document\Message
             filters:
                 from:
                     property_name: from.value
@@ -100,7 +111,7 @@ oka_pagination:
                     issuedAt: desc
         send_report:
             db_driver: mongodb
-            class: Oka\Notifier\ServerBundle\Tests\Document\SendReport
+            class: Oka\Notifier\ServerBundle\Test\Document\SendReport
             filters:
                 channel:
                     cast_type: string
@@ -111,7 +122,7 @@ oka_pagination:
                     issuedAt: desc
         send_report_orm:
             db_driver: orm
-            class: Oka\Notifier\ServerBundle\Tests\Entity\SendReport
+            class: Oka\Notifier\ServerBundle\Test\Entity\SendReport
             filters:
                 channel:
                     cast_type: string
@@ -125,7 +136,7 @@ oka_notifier_server:
     channels:
         local:
             enabled: true
-            class_name: Oka\Notifier\ServerBundle\Tests\Document\Message
+            class_name: Oka\Notifier\ServerBundle\Test\Document\Message
         sms:
             enabled: true
         smpp:
@@ -140,6 +151,14 @@ oka_notifier_server:
         firebase:
             enabled: true
     contact:
-        class_name: Oka\Notifier\ServerBundle\Tests\Document\Contact
+        class_name: Oka\Notifier\ServerBundle\Test\Document\Contact
     reporting:
-        class_name: Oka\Notifier\ServerBundle\Tests\Document\SendReport
+        class_name: Oka\Notifier\ServerBundle\Test\Document\SendReport
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Oka\Notifier\ServerBundle\Tests\MockHttpClientCallback:
+        public: true

@@ -10,9 +10,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class CheckPaginationEnabledPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
-        if ((true === $container->has('oka_notifier_server.message_controller') || true === $container->has('oka_notifier_server.send_report_controller'))
+        if ((true === $container->has('oka_notifier_server.message_controller')
+            || true === $container->has('oka_notifier_server.send_report_controller'))
             && false === $container->has('oka_pagination.pagination_manager')) {
             throw new \LogicException('To enable message or reporting controllers you have to install the "coka/pagination-bundle".');
         }

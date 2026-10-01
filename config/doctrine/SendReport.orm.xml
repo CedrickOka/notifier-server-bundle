@@ -3,14 +3,14 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-                          
+
     <mapped-superclass name="Oka\Notifier\ServerBundle\Model\SendReport">
         <field name="channel" column="channel" type="string" length="32" />
         <field name="payload" column="payload" type="json" />
         <field name="issuedAt" column="issued_at" type="datetime" />
 
         <indexes>
-            <index name="channel_idx" columns="channel"/>
+            <index name="send_report_channel" columns="channel"/>
         </indexes>
 
         <lifecycle-callbacks>
