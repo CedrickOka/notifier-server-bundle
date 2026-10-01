@@ -8,9 +8,6 @@ framework:
     php_errors:
         log: true
 
-    property_info:
-        with_constructor_extractor: true
-
     cache:
         # Put the unique name of your app here: the prefix seed
         # is used to compute stable namespaces for cache keys.
