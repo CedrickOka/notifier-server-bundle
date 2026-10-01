@@ -2,7 +2,7 @@
 
 namespace Oka\Notifier\ServerBundle\Test\Document;
 
-use Doctrine\ODM\MongoDB\Mapping\Attribute as MongoDB;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Oka\Notifier\ServerBundle\Model\SendReport as BaseSendReport;
 
 /**
