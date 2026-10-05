@@ -3,6 +3,7 @@
 namespace Oka\Notifier\ServerBundle\DependencyInjection\Compiler;
 
 use Doctrine\Persistence\ObjectManager;
+use Oka\Notifier\ServerBundle\Command\CleanUpCommand;
 use Oka\Notifier\ServerBundle\OkaNotifierServerBundle;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -33,5 +34,9 @@ class LocalChannelPass implements CompilerPassInterface
 
         $messageManagerDefinition = $container->getDefinition('oka_notifier_server.message_manager');
         $messageManagerDefinition->replaceArgument(0, new Reference('oka_notifier_server.message.object_manager'));
+
+        // Configure "Oka\Notifier\ServerBundle\Command\CleanUpCommand" command
+        $cleanUpCommandDefinition = $container->getDefinition(CleanUpCommand::class);
+        $cleanUpCommandDefinition->replaceArgument(0, new Reference('oka_notifier_server.message_manager'));
     }
 }

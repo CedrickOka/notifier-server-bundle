@@ -12,3 +12,8 @@ services:
     Oka\Notifier\ServerBundle\Controller\NotificationController:
         public: true
         alias: 'oka_notifier_server.notification_controller'
+
+    Oka\Notifier\ServerBundle\Command\CleanUpCommand:
+        arguments: [~, ~]
+        tags:
+          - {name: 'console.command', command: 'oka:notifier:cleanup'}

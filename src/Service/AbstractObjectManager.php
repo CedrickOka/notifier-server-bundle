@@ -33,6 +33,16 @@ abstract class AbstractObjectManager
         $this->objectRepository = $objectManager->getRepository($this->class);
     }
 
+    public function getClassName(): string
+    {
+        return $this->class;
+    }
+
+    public function getObjectManager(): ObjectManager
+    {
+        return $this->objectManager;
+    }
+
     public function save(mixed $object): void
     {
         if (false === $this->objectManager->contains($object)) {

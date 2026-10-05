@@ -3,6 +3,7 @@
 namespace Oka\Notifier\ServerBundle\DependencyInjection\Compiler;
 
 use Doctrine\Persistence\ObjectManager;
+use Oka\Notifier\ServerBundle\Command\CleanUpCommand;
 use Oka\Notifier\ServerBundle\OkaNotifierServerBundle;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -31,11 +32,15 @@ class NotificationReportingPass implements CompilerPassInterface
         $objectManagerDefinition = $container->setDefinition('oka_notifier_server.reporting.object_manager', new Definition(ObjectManager::class));
         $objectManagerDefinition->setFactory([new Reference('oka_notifier_server.reporting.doctrine_registry'), 'getManager']);
 
-        $messageManagerDefinition = $container->getDefinition('oka_notifier_server.send_report_manager');
-        $messageManagerDefinition->replaceArgument(0, new Reference('oka_notifier_server.reporting.object_manager'));
+        $sendReportManagerDefinition = $container->getDefinition('oka_notifier_server.send_report_manager');
+        $sendReportManagerDefinition->replaceArgument(0, new Reference('oka_notifier_server.reporting.object_manager'));
 
         // Configure "oka_notifier_server.messenger.notification_handler" service
         $notificationHandlerDefinition = $container->getDefinition('oka_notifier_server.messenger.notification_handler');
         $notificationHandlerDefinition->replaceArgument(2, new Reference('oka_notifier_server.send_report_manager'));
+
+        // Configure "Oka\Notifier\ServerBundle\Command\CleanUpCommand" command
+        $cleanUpCommandDefinition = $container->getDefinition(CleanUpCommand::class);
+        $cleanUpCommandDefinition->replaceArgument(1, new Reference('oka_notifier_server.send_report_manager'));
     }
 }
