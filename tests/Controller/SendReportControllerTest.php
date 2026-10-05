@@ -2,7 +2,7 @@
 
 namespace Oka\Notifier\ServerBundle\Tests\Controller;
 
-use Oka\Notifier\ServerBundle\Test\Document\SendReport;
+use Doctrine\ORM\Tools\SchemaTool;
 use Oka\Notifier\ServerBundle\Test\WebTestCase;
 
 /**
@@ -10,16 +10,15 @@ use Oka\Notifier\ServerBundle\Test\WebTestCase;
  */
 class SendReportControllerTest extends WebTestCase
 {
-    public static function setUpBeforeClass(): void
+    protected function setUp(): void
     {
-        static::bootKernel();
+        parent::setUp();
 
-        /** @var \Doctrine\ODM\MongoDB\DocumentManager $dm */
-        $dm = static::getContainer()->get('doctrine_mongodb.odm.document_manager');
-        $dm->createQueryBuilder(SendReport::class)
-            ->remove()
-            ->getQuery()
-            ->execute();
+        /** @var \Doctrine\ORM\EntityManagerInterface $em */
+        $em = static::getContainer()->get('doctrine.orm.entity_manager');
+        $metaData = $em->getMetadataFactory()->getAllMetadata();
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->updateSchema($metaData);
     }
 
     /**

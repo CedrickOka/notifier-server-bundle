@@ -27,7 +27,7 @@ framework:
         utf8: true
 
     http_client:
-        mock_response_factory: Oka\Notifier\ServerBundle\Tests\MockHttpClientCallback
+        mock_response_factory: Oka\Notifier\ServerBundle\Test\MockHttpClientCallback
 
     messenger:
         transports:
@@ -109,18 +109,18 @@ oka_pagination:
             sort:
                 order:
                     issuedAt: desc
+#        send_report:
+#            db_driver: mongodb
+#            class: Oka\Notifier\ServerBundle\Test\Document\SendReport
+#            filters:
+#                channel:
+#                    cast_type: string
+#                issuedAt:
+#                    cast_type: string
+#            sort:
+#                order:
+#                    issuedAt: desc
         send_report:
-            db_driver: mongodb
-            class: Oka\Notifier\ServerBundle\Test\Document\SendReport
-            filters:
-                channel:
-                    cast_type: string
-                issuedAt:
-                    cast_type: string
-            sort:
-                order:
-                    issuedAt: desc
-        send_report_orm:
             db_driver: orm
             class: Oka\Notifier\ServerBundle\Test\Entity\SendReport
             filters:
@@ -153,12 +153,14 @@ oka_notifier_server:
     contact:
         class_name: Oka\Notifier\ServerBundle\Test\Document\Contact
     reporting:
-        class_name: Oka\Notifier\ServerBundle\Test\Document\SendReport
+        db_driver: orm
+        class_name: Oka\Notifier\ServerBundle\Test\Entity\SendReport
+        pagination_manager_name: send_report
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
 
-    Oka\Notifier\ServerBundle\Tests\MockHttpClientCallback:
+    Oka\Notifier\ServerBundle\Test\MockHttpClientCallback:
         public: true

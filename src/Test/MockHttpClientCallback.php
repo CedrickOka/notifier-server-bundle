@@ -1,6 +1,6 @@
 <?php
 
-namespace Oka\Notifier\ServerBundle\Tests;
+namespace Oka\Notifier\ServerBundle\Test;
 
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\ResponseInterface;

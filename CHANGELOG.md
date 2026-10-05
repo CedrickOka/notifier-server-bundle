@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+#### 2.1.0 (2026-10-05)
+
+* Added command for clean up object.
+
 #### 2.0.0 (2026-09-30)
 
 * Upgrade to Symfony 7.4.
