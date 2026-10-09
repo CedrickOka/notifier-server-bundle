@@ -20,6 +20,7 @@
     <env name="KERNEL_CLASS" value="Oka\Notifier\ServerBundle\Tests\AppKernel"/>
     <env name="DATABASE_URL" value="sqlite:///:memory:"/>
     <env name="MONGODB_URL" value="mongodb://root:root@localhost:27017"/>
+    <env name="MONGODB_URI" value="mongodb://root:root@localhost:27017"/>
     <env name="MONGODB_DB" value="db_name"/>
     <env name="SENDER_ADDRESS" value="test"/>
     <env name="RECEIVER_ADDRESS" value="test"/>

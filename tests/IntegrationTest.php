@@ -2,6 +2,7 @@
 
 namespace Oka\Notifier\ServerBundle\Tests;
 
+use Doctrine\ORM\Tools\SchemaTool;
 use Oka\Notifier\Message\Address;
 use Oka\Notifier\Message\Notification;
 use Oka\Notifier\ServerBundle\MessageHandler\NotificationHandler;
@@ -39,13 +40,6 @@ class IntegrationTest extends KernelTestCase
         $dm->createQueryBuilder(SendReport::class)->remove()->getQuery()->execute();
     }
 
-    public function setUp(): void
-    {
-        $this->messageManager = static::getContainer()->get('oka_notifier_server.message_manager');
-        $this->sendReportManager = static::getContainer()->get('oka_notifier_server.send_report_manager');
-        $this->handler = new NotificationHandler([static::getContainer()->get('oka_notifier_server.channel.local_handler')], null, $this->sendReportManager);
-    }
-
     /**
      * @covers
      */
@@ -63,5 +57,20 @@ class IntegrationTest extends KernelTestCase
         $this->assertEquals('test', $messages[0]->getTo()->getValue());
         $this->assertEquals(null, $messages[0]->getSubject());
         $this->assertEquals('Hello World!', $messages[0]->getBody());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        /** @var \Doctrine\ORM\EntityManagerInterface $em */
+        $em = static::getContainer()->get('doctrine.orm.entity_manager');
+        $metaData = $em->getMetadataFactory()->getAllMetadata();
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->updateSchema($metaData);
+
+        $this->messageManager = static::getContainer()->get('oka_notifier_server.message_manager');
+        $this->sendReportManager = static::getContainer()->get('oka_notifier_server.send_report_manager');
+        $this->handler = new NotificationHandler([static::getContainer()->get('oka_notifier_server.channel.local_handler')], null, $this->sendReportManager);
     }
 }

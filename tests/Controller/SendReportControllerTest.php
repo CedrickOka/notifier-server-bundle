@@ -10,17 +10,6 @@ use Oka\Notifier\ServerBundle\Test\WebTestCase;
  */
 class SendReportControllerTest extends WebTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        /** @var \Doctrine\ORM\EntityManagerInterface $em */
-        $em = static::getContainer()->get('doctrine.orm.entity_manager');
-        $metaData = $em->getMetadataFactory()->getAllMetadata();
-        $schemaTool = new SchemaTool($em);
-        $schemaTool->updateSchema($metaData);
-    }
-
     /**
      * @covers
      */
@@ -31,5 +20,16 @@ class SendReportControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertEquals(0, count($content['items']));
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        /** @var \Doctrine\ORM\EntityManagerInterface $em */
+        $em = static::getContainer()->get('doctrine.orm.entity_manager');
+        $metaData = $em->getMetadataFactory()->getAllMetadata();
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->updateSchema($metaData);
     }
 }
