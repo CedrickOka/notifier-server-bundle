@@ -2,6 +2,7 @@
 
 namespace Oka\Notifier\ServerBundle\Tests\Controller;
 
+use Doctrine\ORM\Tools\SchemaTool;
 use Oka\Notifier\ServerBundle\Test\WebTestCase;
 
 /**
@@ -31,5 +32,16 @@ class NotificationControllerTest extends WebTestCase
         ], '{"notifications": [{"channels": ["clickatell"], "sender": "Notifier", "receiver": {"name": "2250707070707"}, "message": "Hello World!"}]}');
 
         $this->assertResponseStatusCodeSame(400);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        /** @var \Doctrine\ORM\EntityManagerInterface $em */
+        $em = static::getContainer()->get('doctrine.orm.entity_manager');
+        $metaData = $em->getMetadataFactory()->getAllMetadata();
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->updateSchema($metaData);
     }
 }
