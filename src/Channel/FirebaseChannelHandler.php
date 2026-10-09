@@ -34,7 +34,7 @@ class FirebaseChannelHandler implements ChannelHandlerInterface
             ))
             ->withHighestPossiblePriority();
 
-        if (!empty($attributes)) {
+        if (true === $notification->hasAttribute('data')) {
             $message->withData($attributes['data']);
         }
 
