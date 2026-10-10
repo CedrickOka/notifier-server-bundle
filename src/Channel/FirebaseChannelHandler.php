@@ -35,20 +35,20 @@ class FirebaseChannelHandler implements ChannelHandlerInterface
             ->withHighestPossiblePriority();
 
         if (true === $notification->hasAttribute('data')) {
-            $message->withData($attributes['data']);
+            $message = $message->withData($attributes['data']);
         }
 
         switch ($receiver->getName()) {
             case 'topic':
-                $message->toTopic($receiver->getValue());
+                $message = $message->toTopic($receiver->getValue());
                 break;
 
             case 'condition':
-                $message->toCondition($receiver->getValue());
+                $message = $message->toCondition($receiver->getValue());
                 break;
 
             default:
-                $message->toToken($receiver->getValue());
+                $message = $message->toToken($receiver->getValue());
                 break;
         }
 
