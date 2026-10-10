@@ -3,9 +3,11 @@
 namespace Oka\Notifier\ServerBundle\Channel;
 
 use Kreait\Firebase\Contract\Messaging;
+use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification as CloudNotification;
 use Oka\Notifier\Message\Notification;
+use Oka\Notifier\ServerBundle\Exception\InvalidNotificationException;
 
 /**
  * @author Cedrick Oka Baidai <okacedrick@gmail.com>
@@ -52,7 +54,11 @@ class FirebaseChannelHandler implements ChannelHandlerInterface
                 break;
         }
 
-        $this->messaging->send($message);
+        try {
+            $this->messaging->send($message);
+        } catch (FirebaseException $e) {
+            throw new InvalidNotificationException(null, null, $e);
+        }
     }
 
     public static function getName(): string
