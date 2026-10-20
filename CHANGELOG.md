@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+#### 2.1.5 (2026-10-20)
+
+* Fixed bug.
+
 #### 2.1.0 (2026-10-05)
 
 * Added command for clean up object.
