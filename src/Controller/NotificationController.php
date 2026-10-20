@@ -4,10 +4,10 @@ namespace Oka\Notifier\ServerBundle\Controller;
 
 use Oka\InputHandlerBundle\Annotation\AccessControl;
 use Oka\InputHandlerBundle\Annotation\RequestContent;
+use Oka\Notifier\Message\Enum\AddressType;
 use Oka\Notifier\Message\Notification;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -31,11 +31,14 @@ class NotificationController
     #[RequestContent(constraints: 'createConstraints')]
     public function create(Request $request, $version, $protocol, array $requestContent): JsonResponse
     {
+        $stamps = [];
+
+        if (true == class_exists('Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp')) {
+            $stamps[] = new \Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp(null, AMQP_NOPARAM, ['delivery_mode' => AMQP_DURABLE]);
+        }
+
         foreach ($requestContent['notifications'] as $notification) {
-            $this->bus->dispatch(
-                Notification::create($notification),
-                [new AmqpStamp(null, AMQP_NOPARAM, ['delivery_mode' => AMQP_DURABLE])]
-            );
+            $this->bus->dispatch(Notification::create($notification), $stamps);
         }
 
         return new JsonResponse(null, 204);
@@ -46,8 +49,11 @@ class NotificationController
         $addressConstraints = new Assert\Callback(function ($object, ExecutionContextInterface $context, $payload) {
             if (true === is_array($object)) {
                 $constraints = new Assert\Collection(fields: [
-                    'name' => new Assert\Optional(new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)])),
                     'value' => new Assert\Required(new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)])),
+                    'name' => new Assert\Optional(new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)])),
+                    'type' => new Assert\Optional(new Assert\Choice(choices: array_map(function (AddressType $addressType) {
+                        return $addressType->value;
+                    }, AddressType::cases()))),
                 ]);
             } else {
                 $constraints = new Assert\Sequentially([new Assert\NotBlank(), new Assert\Length(max: 255)]);
