@@ -64,7 +64,6 @@ class SmppChannelHandler implements SmsChannelHandlerInterface
         // Establish connection with SDP server
         $transport->open();
         $smppClient->bindTransmitter($this->configuration['systemId'], $this->configuration['password']);
-        $this->logInfo(sprintf('Channel SMS: Connection  established with the SDP on address "%s:%s".', $this->configuration['host'], $this->configuration['port']), $notification);
 
         $sender = $notification->getSender();
         $receiver = $notification->getReceiver();
@@ -97,11 +96,11 @@ class SmppChannelHandler implements SmsChannelHandlerInterface
 
             $to = new \SMPP\Address($receiver->getValue(), \SMPP\TON_INTERNATIONAL, \SMPP\NPI_E164);
         } catch (\InvalidArgumentException $e) {
-            throw new InvalidNotificationAddressException(null, null, $e);
-        } finally {
             // Cleanup
             $smppClient->close();
             unset($smppClient);
+
+            throw new InvalidNotificationAddressException(null, null, $e);
         }
 
         try {
